@@ -71,9 +71,9 @@
 
     {#if percentReached > 0}
       <p>Your best attempt is at {percentReached}%.</p>
-      <a class="quiz-btn" href={resolve("/en/course/{course.URL}/{lesson.URL}/quiz")}>Restart quiz</a>
+      <a class="quiz-btn" href={resolve(`/en/course/${course.URL}/${lesson.URL}/quiz`)}>Restart quiz</a>
     {:else}
-      <a class="quiz-btn" href={resolve("/en/course/{course.URL}/{lesson.URL}/quiz")}>Start quiz</a>
+      <a class="quiz-btn" href={resolve(`/en/course/${course.URL}/${lesson.URL}/quiz`)}>Start quiz</a>
 
     {/if}
 

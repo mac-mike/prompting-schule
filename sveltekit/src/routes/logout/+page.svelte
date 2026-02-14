@@ -6,7 +6,7 @@
     
     import Header from '$lib/Header.svelte';
 
-    import { resolve } from 'path';
+    import { resolve } from '$app/paths';
 
 //   // export let data: {courses: Course[]}; 
 

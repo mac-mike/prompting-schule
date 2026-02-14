@@ -83,7 +83,7 @@
 </script>
 
 <div class="lessonWrapper">
- <a href={resolve("/en/course/{course.URL}/{lesson.URL}")} class={"lesson-link lesson"}>
+ <a href={resolve(`/en/course/${course.URL}/${lesson.URL}`)} class={"lesson-link lesson"}>
   <h2>{lesson.lessonName}</h2>
   <div class="emoji">{lesson.lessonEmoji}</div>
  
@@ -115,17 +115,17 @@
   <p class="badge-label">Digital Badge</p>
   
   {#if latestBadge}
-    <a href={resolve('/en/course/{course.URL}/{lesson.URL}/badge')} class="button badge-link">
+    <a href={resolve(`/en/course/${course.URL}/${lesson.URL}/badge`)} class="button badge-link">
     Show badge from {new Date(latestBadge.createdAt).toLocaleDateString('de-DE')}
     </a>
   {:else if percentReached >= 75 && lesson.starsNeeded > 0}
-    <a href={resolve('/en/course/{course.URL}/{lesson.URL}/badge')} class="button badge-link">
+    <a href={resolve(`/en/course/${course.URL}/${lesson.URL}/badge`)} class="button badge-link">
     Create badge
     </a>
   {:else if lesson.starsNeeded > 0}
     <p>Complete the quiz with at least 75% for the badge.</p>
   {:else if promptsTried > 0 && lesson.starsNeeded == 0}
-    <a href={resolve('/en/course/{course.URL}/{lesson.URL}/badge')} class="button badge-link">
+    <a href={resolve(`/en/course/${course.URL}/${lesson.URL}/badge`)} class="button badge-link">
     Create badge
     </a>
   {:else}
