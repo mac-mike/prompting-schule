@@ -3,6 +3,9 @@
   import type { JwtUserPayload } from './server/jwt';
   import { onMount } from 'svelte';
   
+  import { asset, resolve } from '$app/paths';
+
+  
   
   export let navItems: { name: string; href: string }[] = [];
   export let user: JwtUserPayload | null = null;
@@ -45,8 +48,8 @@
 </svelte:head>
 <header>
   <div class="logo">
-    <a href='/'>
-      <h3><img src="/logo-prompting.schule-bg.png" alt="{siteName} Logo" /> {siteName}</h3>
+    <a href={resolve('/')}>
+      <h3><img src={asset("/logo-prompting.schule-bg.png")} alt="{siteName} Logo" /> {siteName}</h3>
     </a>
   </div>
 
@@ -54,7 +57,7 @@
 
   <nav>
     {#each navItems as item, i}
-      <a href={item.href}>{item.name}</a>
+      <a href={resolve(item.href)}>{item.name}</a>
       {#if i < navItems.length - 1}
         <span class="seperator"> / </span>
       {/if}
@@ -65,15 +68,15 @@
   <div class="login">
     {#if lang == 'de'}
       {#if user?.email}
-        <a href='/profil'>Profil {user?.email}</a>
+        <a href={resolve('/profil')}>Profil {user?.email}</a>
         {:else}
-          <a href="/login">🔑 Anmelden</a>
+          <a href={resolve("/login")}>🔑 Anmelden</a>
         {/if}
     {:else}
         {#if user?.email}
-        <a href='/en/profile'>Profile {user?.email}</a>
+        <a href={resolve('/en/profile')}>Profile {user?.email}</a>
         {:else}
-          <a href="/en/login">🔑 Login</a>
+          <a href={resolve("/en/login")}>🔑 Login</a>
         {/if}
     {/if}
     
@@ -82,11 +85,11 @@
   <div class="logo-tugraz">
     {#if lang == 'en'}
     <div class="langSelect">
-      <a href="https://prompting.schule/"><img src="/fonts/noto-emoji/emoji_u1f1e6_1f1f9.svg" alt="Austria Flag"></a>
-      <a href="https://prompting.school/en/"><img src="/fonts/noto-emoji/emoji_u1f1ec_1f1e7.svg" alt="UK Flag"></a>
+      <a href="https://prompting.schule/"><img src={asset("/fonts/noto-emoji/emoji_u1f1e6_1f1f9.svg")} alt="Austria Flag"></a>
+      <a href="https://prompting.school/en/"><img src={asset("/fonts/noto-emoji/emoji_u1f1ec_1f1e7.svg")} alt="UK Flag"></a>
     </div>
     {/if}
 
-    <img src="/logo-tugraz-white.svg" alt="TU Graz Logo"></div>
+    <img src={asset("/logo-tugraz-white.svg")} alt="TU Graz Logo"></div>
   <div class='flex-full'></div>
 </header>

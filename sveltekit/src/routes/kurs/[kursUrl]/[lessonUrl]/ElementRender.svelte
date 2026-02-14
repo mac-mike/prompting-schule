@@ -7,6 +7,7 @@
   import { marked } from 'marked';
 
   import { onMount } from 'svelte';
+  import { resolve } from '$app/paths';
     
   
 
@@ -46,7 +47,7 @@
         elementId: element.id
       };
 
-      const response = await fetch('/api/userProgress' , {
+      const response = await fetch(resolve('/api/userProgress') , {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -76,7 +77,7 @@
         elementId: element.id
       };
 
-      const response = await fetch('/api/userProgress' , {
+      const response = await fetch(resolve('/api/userProgress') , {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -111,7 +112,7 @@
         elementId: element.id
       };
       
-      const response = await fetch('/api/userProgress' , {
+      const response = await fetch(resolve('/api/userProgress') , {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -215,7 +216,7 @@
       lessonId: lesson.id
     };
 
-    const response = await fetch(`/api/userProgress`, {
+    const response = await fetch(resolve('/api/userProgress'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -263,7 +264,7 @@
 }) {
   startTimer(timerKey);
 
-  const response = await fetch(`/api/aiAnswer`, {
+  const response = await fetch(resolve('/api/aiAnswer'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ action, data })

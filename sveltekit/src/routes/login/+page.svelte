@@ -6,6 +6,7 @@
   let loading = false;
   import Header from '$lib/Header.svelte';
   import { browser } from '$app/environment';
+  import { resolve } from '$app/paths';
 
   import type { JwtUserPayload } from '$lib/server/jwt';
 
@@ -15,7 +16,7 @@
 let userId = "";
 if (browser) {
     if (data.user) {
-      window.location.href = "/profil";
+      window.location.href = resolve("/profil");
     }
 //   userId = localStorage.getItem("userId");
 //   console.log("Benutzer-ID:", userId);
@@ -39,7 +40,7 @@ if (browser) {
                 email,
                 password,
             };
-          const response = await fetch("/login", {
+          const response = await fetch(resolve("/login"), {
               method: "POST",
               headers: {
                   "Content-Type": "application/json",
@@ -54,7 +55,7 @@ if (browser) {
           
           if (response.ok && data.success) {
 
-            window.location.href = "/kurse";
+            window.location.href = resolve("/kurse");
             // console.log("Benutzer erfolgreich angemeldet:", data.user);
             //   localStorage.setItem("userId", data.user.id);
             //   localStorage.setItem("userEmail", data.user.email);

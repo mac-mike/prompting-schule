@@ -8,6 +8,9 @@
   import QuizStarRender from './QuizStarRender.svelte';
   import { on } from 'svelte/events';
   
+  import { resolve } from '$app/paths';
+
+
   import type { JwtUserPayload } from '$lib/server/jwt';
 
   export let data: {course: Course, lesson: Lesson, elements: Element[], user: JwtUserPayload}; 
@@ -39,7 +42,7 @@
       userId: data.user.id,
       lessonId: data.lesson.id
     };
-    const response = await fetch('/api/userProgress' , {
+    const response = await fetch(resolve('/api/userProgress') , {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

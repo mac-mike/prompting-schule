@@ -2,6 +2,8 @@
       
   import Header from '$lib/Header.svelte';  
   
+  import { resolve } from '$app/paths';
+
   import type { JwtUserPayload } from '$lib/server/jwt';
   
   export let data: { user: JwtUserPayload };
@@ -32,7 +34,7 @@
                 oldPassword,
                 newPassword,
             };
-          const response = await fetch("/profil", {
+          const response = await fetch(resolve("/profil"), {
               method: "POST",
               headers: {
                   "Content-Type": "application/json",
@@ -80,7 +82,7 @@
               password,
                 email,
             };
-          const response = await fetch("/profil", {
+          const response = await fetch(resolve("/profil"), {
               method: "POST",
               headers: {
                   "Content-Type": "application/json",
@@ -95,7 +97,7 @@
           
           if (response.ok && data.success) {
 
-            window.location.href = "/logout";
+            window.location.href = resolve("/logout");
 
           } else if (data.error) {
               delResult = data.error;

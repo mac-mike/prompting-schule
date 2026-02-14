@@ -4,6 +4,8 @@
 
   import { onMount } from 'svelte';
 
+  import { resolve } from '$app/paths';
+
 
   export let course: Course ;
   export let lesson: Lesson ;
@@ -28,7 +30,7 @@
         lessonId: lesson.id
       };
 
-    const response = await fetch('/api/userProgress' , {
+    const response = await fetch(resolve('/api/userProgress') , {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -53,7 +55,7 @@
       }
 
 
-      const response = await fetch('/api/quiz' , {
+      const response = await fetch(resolve('/api/quiz') , {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

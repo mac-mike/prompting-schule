@@ -6,6 +6,8 @@
   
   export let data: { user: JwtUserPayload };
 
+  import { resolve } from '$app/paths';
+
 
   let oldPassword = "";
   let email = "";
@@ -32,7 +34,7 @@
                 oldPassword,
                 newPassword,
             };
-          const response = await fetch("/en/profile", {
+          const response = await fetch(resolve("/en/profile"), {
               method: "POST",
               headers: {
                   "Content-Type": "application/json",
@@ -80,7 +82,7 @@
               password,
                 email,
             };
-          const response = await fetch("/en/profile", {
+          const response = await fetch(resolve("/en/profile"), {
               method: "POST",
               headers: {
                   "Content-Type": "application/json",
@@ -95,7 +97,7 @@
           
           if (response.ok && data.success) {
 
-            window.location.href = "/en/logout";
+            window.location.href = resolve("/en/logout");
 
           } else if (data.error) {
               delResult = data.error;

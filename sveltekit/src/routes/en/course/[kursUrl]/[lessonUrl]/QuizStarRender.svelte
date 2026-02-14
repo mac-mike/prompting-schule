@@ -2,6 +2,9 @@
   import type { JwtUserPayload } from '$lib/server/jwt';
     import type { Course, Lesson } from '@prisma/client';
 
+  import { resolve } from '$app/paths';
+
+
   export let course: Course;
   export let lesson: Lesson;
   export let user: JwtUserPayload;
@@ -25,7 +28,7 @@
       };
 
 
-      const response = await fetch('/api/quiz' , {
+      const response = await fetch(resolve('/api/quiz') , {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

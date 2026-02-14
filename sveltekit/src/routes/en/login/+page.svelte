@@ -6,6 +6,7 @@
   let loading = false;
   import Header from '$lib/Header.svelte';
   import { browser } from '$app/environment';
+  import { resolve } from '$app/paths';
 
   import type { JwtUserPayload } from '$lib/server/jwt';
 
@@ -15,7 +16,7 @@
 let userId = "";
 if (browser) {
     if (data.user) {
-      window.location.href = "/en/profile";
+      window.location.href = resolve("/en/profile");
     }
 }
 
@@ -34,7 +35,7 @@ if (browser) {
                 email,
                 password,
             };
-          const response = await fetch("/en/login", {
+          const response = await fetch(resolve("/en/login"), {
               method: "POST",
               headers: {
                   "Content-Type": "application/json",
@@ -49,7 +50,7 @@ if (browser) {
           
           if (response.ok && data.success) {
 
-            window.location.href = "/en/courses";
+            window.location.href = resolve("/en/courses");
            
           } else {
               error = data.error || "Invalid login credentials. Please try again.";

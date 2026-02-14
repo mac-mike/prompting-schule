@@ -1,6 +1,9 @@
 <script lang="ts">
       import Header from '$lib/Header.svelte';
 
+  import { resolve } from '$app/paths';
+
+
   let email = "";
   let password = "";
   let loading = false;
@@ -14,7 +17,7 @@
 
   if (browser) {
     if (data.user) {
-      window.location.href = "/en/profile";
+      window.location.href = resolve("/en/profile");
     }
     }
 
@@ -43,7 +46,7 @@
                 password,
             };
 
-          const response = await fetch(`/en/register/`, { 
+          const response = await fetch(resolve('/en/register/'), { 
               method: "POST",
               headers: {
                   "Content-Type": "application/json",
@@ -64,7 +67,7 @@
 
             //   localStorage.setItem("userId", data.user.id);
             //   localStorage.setItem("userEmail", data.user.email);
-              window.location.href = "/en/profile";
+              window.location.href = resolve("/en/profile");
               // navigate("/en/login");
           } else {
               error = data.error || "Failed to register. Please try again.";

@@ -3,6 +3,7 @@
   import { onMount } from 'svelte';
   import type { Badge, Lesson } from '@prisma/client';
     import type { JwtUserPayload } from '$lib/server/jwt';
+  import { resolve } from '$app/paths';
 
   export let badge: Badge;
   export let lesson: Lesson;
@@ -15,7 +16,7 @@
       lessonId: lesson.id,
       hash: badgeHash
     }
-    const response = await fetch('/api/badge', {
+    const response = await fetch(resolve('/api/badge'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

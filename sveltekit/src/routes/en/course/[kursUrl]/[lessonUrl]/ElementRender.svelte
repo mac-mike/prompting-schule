@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { JwtUserPayload } from '$lib/server/jwt';
 
+  import { resolve } from '$app/paths';
 
   import type { Element, Course, Lesson, User } from '@prisma/client';
 
@@ -46,7 +47,7 @@
         elementId: element.id
       };
 
-      const response = await fetch('/api/userProgress' , {
+      const response = await fetch(resolve('/api/userProgress') , {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -76,7 +77,7 @@
         elementId: element.id
       };
 
-      const response = await fetch('/api/userProgress' , {
+      const response = await fetch(resolve('/api/userProgress') , {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -111,7 +112,7 @@
         elementId: element.id
       };
       
-      const response = await fetch('/api/userProgress' , {
+      const response = await fetch(resolve('/api/userProgress' , {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -215,7 +216,7 @@
       lessonId: lesson.id
     };
 
-    const response = await fetch(`/api/userProgress`, {
+    const response = await fetch(resolve('/api/userProgress'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -263,7 +264,7 @@
 }) {
   startTimer(timerKey);
 
-  const response = await fetch(`/api/en/aiAnswer`, {
+  const response = await fetch(resolve('/api/en/aiAnswer'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ action, data })

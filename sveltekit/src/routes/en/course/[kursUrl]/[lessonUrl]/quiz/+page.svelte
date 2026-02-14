@@ -6,6 +6,9 @@
   import type { Course, Lesson, QuizQuestion } from '@prisma/client';
   import type { JwtUserPayload } from '$lib/server/jwt';
 
+  import { resolve } from '$app/paths';
+
+
   export let data: {course: Course, lesson: Lesson, quizQuestions: QuizQuestion[], user: JwtUserPayload}; 
   let userId = "";
   let userStars = 0;
@@ -36,7 +39,7 @@
   });
 
   async function updateUserStars() {
-    const response = await fetch('/api/userProgress' , {
+    const response = await fetch(resolve('/api/userProgress') , {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -78,7 +81,7 @@
       answers: JSON.stringify(answers)
     };
 
-    const response = await fetch(`/api/quiz`, {
+    const response = await fetch(resolve('/api/quiz'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

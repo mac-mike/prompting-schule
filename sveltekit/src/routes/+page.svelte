@@ -2,6 +2,9 @@
   import Header from "$lib/Header.svelte";
   import type { JwtUserPayload } from '$lib/server/jwt';
 
+  import { asset, resolve } from '$app/paths';
+   
+
   export let data: { user: JwtUserPayload }; 
 </script>
 <Header user={data.user}  />
@@ -22,14 +25,14 @@
 <section class="hero">
   <!-- Dimmed Letters -->
   <div class="dimmed-text">PROMPTING.SCHULE</div>
-  <h1><img src='/logo-prompting.schule-bg.png' style="height: 1.3em;
+  <h1><img src={asset('/logo-prompting.schule-bg.png')} style="height: 1.3em;
     position: relative;
     top: 0.3em;
     margin-right: 0.3em;" alt="prompting.schule Logo" /> Meistern Sie Prompt-Engineering</h1>
   <p>
       Erzielen Sie bessere Ergebnisse mit KI-Modellen wie ChatGPT, indem Sie bewährte Strategien erlernen, klare Anweisungen zu schreiben und komplexe Aufgaben zu vereinfachen.
   </p>
-  <a href="/login" class="cta-button">jetzt anmelden</a>
+  <a href={resolve("/login")} class="cta-button">jetzt anmelden</a>
 </section>
 
 <!-- Language Selector -->
@@ -170,7 +173,7 @@
     Melden Sie sich noch heute an und lernen Sie im Grundlagen-Kurs bewährte Strategien, um Prompt-Engineering zu meistern!
   </p>
   <div class="cta-buttons">
-    <a href="/login" class="cta-button" style="margin-bottom: 5em;">jetzt anmelden</a>
+    <a href={resolve("/login")} class="cta-button" style="margin-bottom: 5em;">jetzt anmelden</a>
   </div>
 </section>
 
