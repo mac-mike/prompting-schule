@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 // import { PrismaClient } from '@prisma/client';
 
-import { env } from '$env/dynamic/private';
+import { env } from '$env/dynamic/public';
 
 
 

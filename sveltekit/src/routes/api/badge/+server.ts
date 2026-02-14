@@ -3,7 +3,7 @@
 import { prisma } from '$lib/server/db';
 
 
-import { env } from '$env/dynamic/private';
+import { env } from '$env/dynamic/public';
 
 
 import { error, json } from '@sveltejs/kit';

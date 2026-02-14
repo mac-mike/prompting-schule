@@ -5,7 +5,7 @@ import { json } from '@sveltejs/kit';
 import { prisma } from '$lib/server/db';
 
 
-import { env } from '$env/dynamic/private';
+import { env } from '$env/dynamic/public';
 
 
 export async function GET({ params }) {

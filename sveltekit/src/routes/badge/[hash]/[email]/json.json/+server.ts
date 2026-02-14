@@ -2,7 +2,7 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-import { env } from '$env/dynamic/private';
+import { env } from '$env/dynamic/public';
 
 export async function GET({ params }) {
 	const { hash, email } = params;
