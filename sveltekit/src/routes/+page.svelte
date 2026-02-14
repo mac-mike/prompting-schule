@@ -39,7 +39,7 @@
 <!-- <div class="language-selector">
   <p>Sprache:</p>
   <button class="language-button">
-    <a href="https://a-i.education/"> English </a>
+    <a href="https://prompting.school/"> English </a>
 </button>
 <button class="language-button">
     <a href="https://prompting.schule"> Deutsch </a>

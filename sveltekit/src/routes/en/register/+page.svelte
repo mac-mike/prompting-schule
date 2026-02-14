@@ -252,7 +252,7 @@
                 Participation is voluntary.<br>
                 The data provided will be evaluated for scientific purposes.<br>
                   <input type="checkbox" bind:checked={agree} required>
-                  I have read and accept the <a href="/mehr/datenschutz" target="_blank">data protection and participation conditions</a>.
+                  I have read and accept the <a href={resolve("/mehr/datenschutz")} target="_blank">data protection and participation conditions</a>.
 
               </label>
           </div>
@@ -265,7 +265,7 @@
       </form>
       <div class="alt-links">
           <p>Already have an account?</p>
-          <a href="/en/login" class="button invert">Log in</a>
+          <a href={resolve("/en/login")} class="button invert">Log in</a>
       
       </div>
   </div>

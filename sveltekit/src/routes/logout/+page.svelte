@@ -30,5 +30,5 @@
   
   <p>Sie wurden erfolgreich abgemeldet.</p>
 
-  <a href="/">Zur Startseite</a>
+  <a href={resolve("/")}>Zur Startseite</a>
 </main>

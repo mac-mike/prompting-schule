@@ -230,10 +230,10 @@ if (browser) {
       </form>
       <div class="alt-links">
         
-          <a style="color: var(--color-complementary);"  href='/passwort'>Passwort vergessen</a>
+          <a style="color: var(--color-complementary);"  href={resolve('/passwort')}>Passwort vergessen</a>
 
           <p>Sie haben noch kein Konto?</p>
-          <a href="/registrierung" class="button invert">Registrierung</a>
+          <a href={resolve("/registrierung")} class="button invert">Registrierung</a>
       </div>
   </div>
 </div>

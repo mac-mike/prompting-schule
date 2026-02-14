@@ -106,7 +106,7 @@ async function handleSubmit() {
 
   <div class="alt-links">
       <p>Sie kennen Ihr Passwort?</p>
-      <a href="/login" class="button invert">Einloggen
+      <a href={resolve("/login")} class="button invert">Einloggen
       </a>
   </div>
 </div>

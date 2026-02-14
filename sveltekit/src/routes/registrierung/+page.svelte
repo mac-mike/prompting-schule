@@ -252,7 +252,7 @@
                 Die Teilnahme ist freiwillig.<br>
                 Die eingegebenen Daten werden für wissenschaftliche Zwecke ausgewertet.<br>
                   <input type="checkbox" bind:checked={agree} required>
-                  Ich habe den  <a href="/mehr/datenschutz" target="_blank">Datenschutz und die Teilnahmebedingungen</a> gelesen und akzeptiere sie.
+                  Ich habe den  <a href={resolve("/mehr/datenschutz")} target="_blank">Datenschutz und die Teilnahmebedingungen</a> gelesen und akzeptiere sie.
 
               </label>
           </div>
@@ -265,7 +265,7 @@
       </form>
       <div class="alt-links">
           <p>Haben Sie bereits ein Konto?</p>
-          <a href="/login" class="button invert">Einloggen
+          <a href={resolve("/login")} class="button invert">Einloggen
           </a>
       </div>
   </div>

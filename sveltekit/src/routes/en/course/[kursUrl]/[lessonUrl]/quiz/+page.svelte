@@ -180,10 +180,10 @@
     {#if quizResults.percent >= 75}
       <!-- todo 75 -->
       <p><i class="fas fa-check-circle" style="color: #638e21;"></i> Well done! Lesson completed.</p>
-      <a class="button" href="/en/course/{data.course.URL}">Go to course page {data.course.name}</a>
+      <a class="button" href={resolve("/en/course/{data.course.URL}")}>Go to course page {data.course.name}</a>
     {:else}
       <p><i class="fas fa-exclamation-circle" style="color: red;"></i> This quiz performance is not enough for the digital badge.</p>
-      <a class="button" href="/en/course/{data.course.URL}/{data.lesson.URL}">Go back to the lesson and review the content. Once you reach 75% on the quiz, you will receive the digital badge.</a>
+      <a class="button" href={resolve("/en/course/{data.course.URL}/{data.lesson.URL}")}>Go back to the lesson and review the content. Once you reach 75% on the quiz, you will receive the digital badge.</a>
     {/if}
   </section>
 {/if}

@@ -2,6 +2,9 @@
   import Header from "$lib/Header.svelte";
   import type { JwtUserPayload } from "$lib/server/jwt";
   export let data: { user: JwtUserPayload };
+
+  import { resolve } from "path";
+
 </script>
 
 <Header user={data.user} lang={"en"} />
@@ -32,16 +35,16 @@
       Achieve better results with AI models such as ChatGPT by learning proven
       strategies for writing clear instructions and simplifying complex tasks.
     </p>
-    <a href="/en/login" class="cta-button">Sign up now</a>
+    <a href={resolve("/en/login")} class="cta-button">Sign up now</a>
   </section>
   <!-- Language Selector -->
   <!-- <div class='language-selector'>
   <p>Language:</p>
   <button class='language-button'>
-    <a href='https://a-i.education/'> English </a>
+    <a href={resolve('https://prompting.school/'> English </a>
 </button>
 <button class='language-button'>
-    <a href='https://prompting.schule'> German </a>
+    <a href={resolve('https://prompting.schule'> German </a>
 </button>
 </div> -->
   <section class="benefits-section">
@@ -174,7 +177,7 @@
       in the Fundamentals course!
     </p>
     <div class="cta-buttons">
-      <a href="/en/login" class="cta-button" style="margin-bottom: 5em;"
+      <a href={resolve("/en/login")} class="cta-button" style="margin-bottom: 5em;"
         >Sign up now</a
       >
     </div>

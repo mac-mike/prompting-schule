@@ -121,7 +121,7 @@
 
     <div style="margin-bottom: 3em;">
 
-      <a href="/en/courses" class="button large secondary">Go to Courses</a>
+      <a href={resolve("/en/courses")} class="button large secondary">Go to Courses</a>
     </div>
 
     
@@ -154,7 +154,7 @@
     
   <div style="margin-bottom: 2em;">
 
-    <a href="/en/logout" class="button large complementary" data-sveltekit-reload rel="external">Logout</a>
+    <a href={resolve("/en/logout")} class="button large complementary" data-sveltekit-reload rel="external">Logout</a>
 
     </div>
 

@@ -143,7 +143,7 @@ textAreas[0].dispatchEvent(new Event('input'));
 {/if}
 
 {#if data.user.isAdmin > 0}
-  <!-- <a href="/kurs/{data.course.URL}/{data.lesson.URL}/edit">Lektion bearbeiten</a> -->
+  <!-- <a href={resolve("/kurs/{data.course.URL}/{data.lesson.URL}/edit")}>Lektion bearbeiten</a> -->
   <pre>Lektion ID {data.lesson.id}</pre>
 {/if}
 
