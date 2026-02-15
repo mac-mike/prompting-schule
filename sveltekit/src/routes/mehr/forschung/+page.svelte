@@ -7,5 +7,5 @@
   <h1>Forschungs-Team</h1>
   
 
-  <a href="/">Zur Startseite</a>
+  <a href={resolve("/")}>Zur Startseite</a>
 </main>

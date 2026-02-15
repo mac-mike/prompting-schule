@@ -6,6 +6,9 @@
   import type { Course, Lesson, QuizQuestion } from '@prisma/client';
   import type { JwtUserPayload } from '$lib/server/jwt';
 
+  import { resolve } from '$app/paths';
+
+
   export let data: {course: Course, lesson: Lesson, quizQuestions: QuizQuestion[], user: JwtUserPayload}; 
   let userId = "";
   let userStars = 0;
@@ -36,7 +39,7 @@
   });
 
   async function updateUserStars() {
-    const response = await fetch('/api/userProgress' , {
+    const response = await fetch(resolve('/api/userProgress') , {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -78,7 +81,7 @@
       answers: JSON.stringify(answers)
     };
 
-    const response = await fetch(`/api/quiz`, {
+    const response = await fetch(resolve('/api/quiz'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -177,10 +180,10 @@
     {#if quizResults.percent >= 75}
       <!-- todo 75 -->
       <p><i class="fas fa-check-circle" style="color: #638e21;"></i> Well done! Lesson completed.</p>
-      <a class="button" href="/en/course/{data.course.URL}">Go to course page {data.course.name}</a>
+      <a class="button" href={resolve(`/en/course/${data.course.URL}`)}>Go to course page {data.course.name}</a>
     {:else}
       <p><i class="fas fa-exclamation-circle" style="color: red;"></i> This quiz performance is not enough for the digital badge.</p>
-      <a class="button" href="/en/course/{data.course.URL}/{data.lesson.URL}">Go back to the lesson and review the content. Once you reach 75% on the quiz, you will receive the digital badge.</a>
+      <a class="button" href={resolve(`/en/course/${data.course.URL}/${data.lesson.URL}`)}>Go back to the lesson and review the content. Once you reach 75% on the quiz, you will receive the digital badge.</a>
     {/if}
   </section>
 {/if}

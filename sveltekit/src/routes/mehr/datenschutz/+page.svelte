@@ -87,5 +87,5 @@ Ein Missbrauch der KI-Funktion, insbesondere zur Verarbeitung, Verbreitung oder 
 Weitere Datenschutzinformationen finden Sie auf <a href="https://bildungsinformatik.at/datenschutz/">https://bildungsinformatik.at/datenschutz/</a>.
 
 </div>
-  <a href="/">Zur Startseite</a>
+  <a href={resolve("/")}>Zur Startseite</a>
 </main>

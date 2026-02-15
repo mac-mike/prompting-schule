@@ -30,5 +30,5 @@
   
   <p>You were logged out.</p>
 
-  <a href="/en">Frontpage</a>
+  <a href={resolve("/en")}>Frontpage</a>
 </main>

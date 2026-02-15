@@ -2,6 +2,8 @@
       
   import Header from '$lib/Header.svelte';  
   
+  import { resolve } from '$app/paths';
+
   import type { JwtUserPayload } from '$lib/server/jwt';
   
   export let data: { user: JwtUserPayload };
@@ -32,7 +34,7 @@
                 oldPassword,
                 newPassword,
             };
-          const response = await fetch("/profil", {
+          const response = await fetch(resolve("/profil"), {
               method: "POST",
               headers: {
                   "Content-Type": "application/json",
@@ -80,7 +82,7 @@
               password,
                 email,
             };
-          const response = await fetch("/profil", {
+          const response = await fetch(resolve("/profil"), {
               method: "POST",
               headers: {
                   "Content-Type": "application/json",
@@ -95,7 +97,7 @@
           
           if (response.ok && data.success) {
 
-            window.location.href = "/logout";
+            window.location.href = resolve("/logout");
 
           } else if (data.error) {
               delResult = data.error;
@@ -119,7 +121,7 @@
 
     <div style="margin-bottom: 3em;">
 
-      <a href="/kurse" class="button large secondary">Zu den Kursen</a>
+      <a href={resolve("/kurse")} class="button large secondary">Zu den Kursen</a>
     </div>
 
     
@@ -152,7 +154,7 @@
     
   <div style="margin-bottom: 2em;">
 
-    <a href="/logout" class="button large complementary" data-sveltekit-reload rel="external">Logout</a>
+    <a href={resolve("/logout")} class="button large complementary" data-sveltekit-reload rel="external">Logout</a>
 
     </div>
 
