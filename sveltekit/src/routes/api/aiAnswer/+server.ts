@@ -9,13 +9,23 @@ import { marked } from 'marked';
 
 
 import { requireLogin } from '$lib/server/jwt';
-import { streamAiResponse as streamOpenAiResponse } from '$lib/server/openAi';
-import { streamAiResponse as streamAzureAiResponse } from '$lib/server/azureAi';
+// import { streamAiResponse as streamOpenAiResponse } from '$lib/server/openAi';
+import { streamAiResponse } from '$lib/server/azureAi';
 
-import { env } from '$env/dynamic/private';
+// import { env } from '$env/dynamic/private';
 
 
-const streamAiResponse = env.AZURE_KEY ? streamAzureAiResponse : streamOpenAiResponse;
+// const streamAiResponse = env.AZURE_KEY ? streamAzureAiResponse : streamOpenAiResponse;
+
+// async function streamAiResponse(...args: any[]) {
+  // if (env.AZURE_KEY) {
+    // const mod = await import('$lib/server/azureAi');
+    // return mod.streamAiResponse(...args);
+  // } else {
+    // const mod = await import('$lib/server/openAi');
+    // return mod.streamAiResponse(...args);
+  // }
+// }
 
 export async function POST({ request, cookies }) {
 	let { data,  action } = await request.json();
