@@ -1,7 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { resolve } from '$app/paths';
-import { redirect } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 
 export const load: PageServerLoad = async ({ cookies, url }) => {
