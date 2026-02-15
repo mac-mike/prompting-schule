@@ -153,7 +153,7 @@ export async function loginSso(user: ssoUser): Promise<Response> {
   });
   
   if (existingUser) {
-    return createJWTResponse(existingUser);
+    return createJWTResponseSSO(existingUser);
 
     const loginResult = await login(user.email, password);
 
@@ -184,7 +184,7 @@ export async function loginSso(user: ssoUser): Promise<Response> {
     }
   });
 
-  return createJWTResponse(newUser);
+  return createJWTResponseSSO(newUser);
 
   const token = createJWT({ id: newUser.id, email: newUser.email, isAdmin: newUser.isAdmin });
 
@@ -213,6 +213,28 @@ export function createJWTResponse(user: { id: string; email: string; isAdmin: nu
     headers: {
       'Set-Cookie': `jwt=${token}; Path=${path}; HttpOnly; Secure; SameSite=Lax; Max-Age=604800`,
       'Content-Type': 'application/json'
+    }
+  });
+}
+
+
+export function createJWTResponseSSO(user: { id: string; email: string; isAdmin: number }): Response {
+  const token = createJWT({
+    id: user.id,
+    email: user.email,
+    isAdmin: user.isAdmin
+  });
+
+  const path = resolve('/');
+  const pathProfil = resolve('/profil');
+
+  // 'Set-Cookie': `jwt=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=604800`,
+  return new Response(null, {
+    status: 302,
+    headers: {
+      'Set-Cookie': `jwt=${token}; Path=${path}; HttpOnly; Secure; SameSite=Lax; Max-Age=86400`,
+      // 'Content-Type': 'application/json',
+      Location: pathProfil
     }
   });
 }
