@@ -67,9 +67,9 @@ export const GET: RequestHandler = async ({ url, cookies, fetch }) => {
     const maxAge = 3600;
 
 
-    const SUBFOLDER = env.SUBFOLDER ?? "/";
+    const SUBFOLDER = env.SUBFOLDER ?? "";
 
-    const path = SUBFOLDER;
+    const path = "/" + SUBFOLDER;
 
     try {
         cookies.delete('pkce_verifier', { path: path });

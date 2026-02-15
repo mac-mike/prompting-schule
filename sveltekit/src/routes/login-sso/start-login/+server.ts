@@ -11,8 +11,8 @@ export const GET: RequestHandler = async ({ cookies, url }) => {
     const { verifier, challenge } = await makePKCE();
     const state = randomState();
 
-      const SUBFOLDER = env.SUBFOLDER ?? "/";
-      const path = SUBFOLDER;
+      const SUBFOLDER = env.SUBFOLDER ?? "";
+      const path = "/" + SUBFOLDER;
 
     // Store temporary cookies for PKCE + state
     cookies.set('pkce_verifier', verifier, {
