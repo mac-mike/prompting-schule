@@ -65,7 +65,12 @@ export const GET: RequestHandler = async ({ url, cookies, fetch }) => {
     // const maxAge = tokens.expires_in ?? 3600;
     const maxAge = 3600;
 
-    return loginSso(user);
+    loginSso(user);
+    
+    return new Response(null, {
+        status: 302,
+        headers: { Location: resolve('/profil') }
+    });
 
     // Create signed JWT session cookie
     const jwt = await new SignJWT({
