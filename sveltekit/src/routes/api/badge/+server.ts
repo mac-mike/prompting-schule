@@ -15,7 +15,7 @@ import { newBadgeHash } from '$lib/server/dbUtils';
 import { requireLogin } from '$lib/server/jwt';
 
 import QRCode from 'qrcode';
-import fs from 'fs';
+import fs from 'node:fs';
 import path from 'path';
 import sharp from 'sharp';
 

@@ -1,6 +1,6 @@
 // import { PrismaClient } from '@prisma/client';
 import sharp from 'sharp';
-import fs from 'fs';
+// import fs from 'fs';
 import path from 'path';
 
 // const prisma = new PrismaClient();

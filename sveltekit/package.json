@@ -22,7 +22,6 @@
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@testing-library/jest-dom": "^6.6.3",
 		"@testing-library/svelte": "^5.2.4",
-		"fs": "^0.0.1-security",
 		"jsdom": "^26.0.0",
 		"path": "^0.12.7",
 		"prisma": "^6.5.0",
