@@ -9,6 +9,7 @@ import { createJWT } from './jwt';
 import { json } from '@sveltejs/kit';
 import { newUserUUID } from '$lib/server/dbUtils.js';
 
+import { resolve } from '$app/paths';
 
 
 export async function hashPassword(password: string) {
@@ -144,10 +145,17 @@ type ssoUser = {
 
 export async function loginSso(user: ssoUser): Promise<Response> {
   
-  const existingUser = await prisma.user.findUnique({ where: { email } });
+  const existingUser = await prisma.user.findFirst({
+    where: {
+      cryptVersion: { in: [3, 4] },
+      password: user.preferred_username
+    }
+  });
   
   if (existingUser) {
-    const loginResult = await login(email, password);
+    return createJWTResponse(existingUser);
+
+    const loginResult = await login(user.email, password);
 
     if ('success' in loginResult && loginResult.success === false) {
       return json({
@@ -160,14 +168,18 @@ export async function loginSso(user: ssoUser): Promise<Response> {
   }
 
   const uuid = await newUserUUID();
-  const hashedPassword = await hashPasswordV2(password, uuid); // assuming hashPassword handles v2
-  const cryptVersion = 2;
+  // const hashedPassword = await hashPasswordV2(password, uuid); // assuming hashPassword handles v2
+
+  const obKey = 'CO-OBFUSCATED-C-BD';
+  const hasObfuscated = obKey in user && !!(user as Record<string, any>)[obKey];
+
+  let cryptVersion = hasObfuscated ? 4 : 3; // 4: has BD, else 3
 
   const newUser = await prisma.user.create({
     data: {
       id: uuid,
-      email,
-      password: hashedPassword,
+      email: user.email,
+      password: user.preferred_username,
       cryptVersion
     }
   });
@@ -193,11 +205,13 @@ export function createJWTResponse(user: { id: string; email: string; isAdmin: nu
     isAdmin: user.isAdmin
   });
 
+  const path = resolve('/');
+
   // 'Set-Cookie': `jwt=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=604800`,
   return new Response(JSON.stringify({ success: true }), {
     status: 200,
     headers: {
-      'Set-Cookie': `jwt=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=604800`,
+      'Set-Cookie': `jwt=${token}; Path=${path}; HttpOnly; Secure; SameSite=Lax; Max-Age=604800`,
       'Content-Type': 'application/json'
     }
   });

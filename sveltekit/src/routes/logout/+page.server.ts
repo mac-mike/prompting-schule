@@ -1,7 +1,14 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { resolve } from '$app/paths';
+import { redirect } from '@sveltejs/kit';
+import { env } from '$env/dynamic/private';
 
 export const load: PageServerLoad = async ({ cookies, url }) => {
+  if (env.KEYCLOAK_CLIENT_SECRET) {
+    throw redirect(302, resolve('/login-sso/logout/'));
+  }
+
   const token = cookies.get('jwt');
 
   // Cookie löschen

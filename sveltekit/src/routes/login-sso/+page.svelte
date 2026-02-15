@@ -191,49 +191,29 @@ if (browser) {
   }
 </style> -->
 
-<Header navItems={[{ name: 'Startseite', href: '/' }, { name: 'Login', href: '/login' }]} user={null} />
+<Header navItems={[{ name: 'Startseite', href: '/' }, { name: 'Login', href: '/login-sso' }]} user={null} />
 
 
 <div class="registerBg">
   <div class="registerBlock">
-      <h2>Anmeldung</h2>
+      <h2>Anmeldung mit Single-Sign-On</h2>
       {#if error}
           <div class="error-message">{error}</div>
       {/if}
-      <form on:submit|preventDefault={handleLogin}>
-          <div class="form-group">
-              <label for="email">E-Mail-Adresse</label>
-              <input
-                  id="email"
-                  type="text"
-                  placeholder="Geben Sie Ihre E-Mail ein"
-                  bind:value={email}
-                  required
-              />
-          </div>
-          <div class="form-group">
-              <label for="password">Passwort</label>
-              <input
-                  id="password"
-                  type="password"
-                  placeholder="Geben Sie Ihr Passwort ein"
-                  bind:value={password}
-                  required
-              />
-          </div>
-          <button type="submit" class="login-button" disabled={loading}>
-              {#if loading}
-                  <div class="loader"></div>
-              {/if}
-              {!loading ? "Anmelden" : "Anmelden..."}
-          </button>
-      </form>
-      <div class="alt-links">
-        
-          <a style="color: var(--color-complementary);"  href={resolve('/passwort')}>Passwort vergessen</a>
+      
 
-          <p>Sie haben noch kein Konto?</p>
-          <a href={resolve("/registrierung")} class="button invert">Registrierung</a>
-      </div>
+      <a href={resolve('/login-sso/start-login')}  data-sveltekit-preload-data="false" class="button">SSO Login</a>
+
+      <div class="checkbox-form">
+              <label>
+                Die Teilnahme ist freiwillig. 
+                <!-- Die eingegebenen Daten werden für wissenschaftliche Zwecke ausgewertet.<br> -->
+                  <!-- <input type="checkbox" bind:checked={agree} required> -->
+                  Sie stimmen den  <a href={resolve("/mehr/datenschutz")} target="_blank">Benutzerrichtlinien</a> zu.
+
+              </label>
+          </div>
+
+
   </div>
 </div>
