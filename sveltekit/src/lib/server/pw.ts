@@ -205,7 +205,8 @@ export function createJWTResponse(user: { id: string; email: string; isAdmin: nu
     isAdmin: user.isAdmin
   });
 
-  const path = resolve('/');
+  const SUBFOLDER = env.SUBFOLDER ?? "/";
+  const path = SUBFOLDER;
 
   // 'Set-Cookie': `jwt=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=604800`,
   return new Response(JSON.stringify({ success: true }), {
@@ -225,7 +226,9 @@ export function createJWTResponseSSO(user: { id: string; email: string; isAdmin:
     isAdmin: user.isAdmin
   });
 
-  const path = resolve('/');
+  const SUBFOLDER = env.SUBFOLDER ?? "/";
+
+  const path = SUBFOLDER;
   const pathProfil = resolve('/profil');
 
   // 'Set-Cookie': `jwt=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=604800`,

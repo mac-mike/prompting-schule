@@ -9,6 +9,7 @@ import { PUBLIC_REDIRECT_URI } from '$env/static/public';
 import { resolve } from '$app/paths';
 
 import { loginSso } from '$lib/server/pw';
+import { env } from '$env/dynamic/private';
 
 // import { SignJWT } from 'jose';
 
@@ -64,6 +65,22 @@ export const GET: RequestHandler = async ({ url, cookies, fetch }) => {
 
     // const maxAge = tokens.expires_in ?? 3600;
     const maxAge = 3600;
+
+
+    const SUBFOLDER = env.SUBFOLDER ?? "/";
+
+    const path = SUBFOLDER;
+
+    try {
+        cookies.delete('pkce_verifier', { path: path });
+        cookies.delete('oauth_state', { path: path });
+        if (path !== '/') {
+            cookies.delete('pkce_verifier', { path: '/' });
+            cookies.delete('oauth_state', { path: '/' });
+        }
+    } catch (e) {
+        console.warn('Failed to delete PKCE/state cookies:', e);
+    }
 
     return loginSso(user);
     
