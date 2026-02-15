@@ -65,7 +65,7 @@ export const GET: RequestHandler = async ({ url, cookies, fetch }) => {
     // const maxAge = tokens.expires_in ?? 3600;
     const maxAge = 3600;
 
-    loginSso(user);
+    return loginSso(user);
     
     return new Response(null, {
         status: 302,
