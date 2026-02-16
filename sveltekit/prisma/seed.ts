@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import fs from 'node:fs'
-import path from 'path'
+import path from 'node:path'
 import { fileURLToPath } from 'url'
 
 const prisma = new PrismaClient()
