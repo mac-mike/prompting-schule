@@ -16,7 +16,7 @@ import { requireLogin } from '$lib/server/jwt';
 
 import QRCode from 'qrcode';
 import fs from 'node:fs';
-import path from 'path';
+import path from 'node:path';
 import sharp from 'sharp';
 
 function fontToBase64(filePath: string) {
