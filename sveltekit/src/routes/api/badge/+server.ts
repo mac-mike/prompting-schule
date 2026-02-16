@@ -15,8 +15,8 @@ import { newBadgeHash } from '$lib/server/dbUtils';
 import { requireLogin } from '$lib/server/jwt';
 
 import QRCode from 'qrcode';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import sharp from 'sharp';
 
 function fontToBase64(filePath: string) {
