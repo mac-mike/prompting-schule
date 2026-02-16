@@ -1,11 +1,12 @@
 import type { RequestHandler } from './$types';
 import { getOIDC } from '$lib/sso/oidc';
 import {
-    KEYCLOAK_CLIENT_ID,
-    KEYCLOAK_CLIENT_SECRET,
+    // KEYCLOAK_CLIENT_ID,
+    // KEYCLOAK_CLIENT_SECRET,
+    env as envPrivate
     // SESSION_JWT_SECRET
-} from '$env/static/private';
-import { PUBLIC_REDIRECT_URI } from '$env/static/public';
+} from '$env/dynamic/private';
+import { env as envPublic } from '$env/dynamic/public';
 import { resolve } from '$app/paths';
 
 import { loginSso } from '$lib/server/pw';
@@ -35,11 +36,11 @@ export const GET: RequestHandler = async ({ url, cookies, fetch }) => {
     const body = new URLSearchParams({
         grant_type: 'authorization_code',
         code,
-        redirect_uri: PUBLIC_REDIRECT_URI,
-        client_id: KEYCLOAK_CLIENT_ID,
+        redirect_uri: envPublic.PUBLIC_REDIRECT_URI,
+        client_id: envPrivate.KEYCLOAK_CLIENT_ID,
         code_verifier: verifier
     });
-    if (KEYCLOAK_CLIENT_SECRET) body.set('client_secret', KEYCLOAK_CLIENT_SECRET);
+    if (KEYCLOAK_CLIENT_SECRET) body.set('client_secret', envPrivate.KEYCLOAK_CLIENT_SECRET);
 
     // Exchange authorization code for tokens
     const tokenRes = await fetch(OIDC.token_endpoint, {

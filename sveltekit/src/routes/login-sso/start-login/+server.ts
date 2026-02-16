@@ -1,7 +1,9 @@
 import type { RequestHandler } from './$types';
 import { getOIDC, makePKCE, randomState } from '$lib/sso/oidc';
-import { KEYCLOAK_CLIENT_ID } from '$env/static/private';
-import { PUBLIC_REDIRECT_URI, PUBLIC_BASE_PATH } from '$env/static/public';
+// import { KEYCLOAK_CLIENT_ID } from '$env/static/private';
+import { env as envPrivate } from '$env/dynamic/private';
+// import { PUBLIC_REDIRECT_URI, PUBLIC_BASE_PATH } from '$env/static/public';
+import { env as envPublic } from '$env/dynamic/public';
 import { resolve } from '$app/paths';
 import { env } from '$env/dynamic/private';
 
@@ -27,8 +29,8 @@ export const GET: RequestHandler = async ({ cookies, url }) => {
     // Build authorization request URL
     const OIDC = await getOIDC();
     const u = new URL(OIDC.authorization_endpoint);
-    u.searchParams.set('client_id', KEYCLOAK_CLIENT_ID);
-    u.searchParams.set('redirect_uri', PUBLIC_REDIRECT_URI);
+    u.searchParams.set('client_id', envPrivate.KEYCLOAK_CLIENT_ID);
+    u.searchParams.set('redirect_uri', envPublic.PUBLIC_REDIRECT_URI);
     // u.searchParams.set('redirect_uri', `${url.origin}${resolve('/callback')}`);
     u.searchParams.set('response_type', 'code');
     u.searchParams.set('scope', 'openid profile email');

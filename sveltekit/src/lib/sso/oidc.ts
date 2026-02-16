@@ -3,8 +3,8 @@
 // 🔐 OpenID Connect (Keycloak) Configuration
 // =======================================
 
-import { KEYCLOAK_CLIENT_ID, KEYCLOAK_ISSUER } from '$env/static/private';
-import { PUBLIC_REDIRECT_URI } from '$env/static/public';
+import { env as envPrivate } from '$env/dynamic/private';
+import { env as envPublic } from '$env/dynamic/public';
 
 // ---------------------------------------
 // Discovery Support (recommended)
@@ -93,7 +93,7 @@ export function randomState() {
 // Debug Output
 // ---------------------------------------
 console.log('OIDC DEBUG', {
-    issuer: KEYCLOAK_ISSUER,
-    client_id: KEYCLOAK_CLIENT_ID,
-    redirect_uri: PUBLIC_REDIRECT_URI
+    issuer: envPrivate.KEYCLOAK_ISSUER,
+    client_id: envPrivate.KEYCLOAK_CLIENT_ID,
+    redirect_uri: envPublic.PUBLIC_REDIRECT_URI
 });
