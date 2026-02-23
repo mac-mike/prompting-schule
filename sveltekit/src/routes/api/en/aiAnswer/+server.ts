@@ -9,10 +9,9 @@ import { marked } from 'marked';
 
 
 import { requireLogin } from '$lib/server/jwt';
-// import { streamAiResponse as streamOpenAiResponse } from '$lib/server/openAi';
-import { streamAiResponse } from '$lib/server/azureAi';
 
-// const streamAiResponse = process.env.AZURE_KEY ? streamAzureAiResponse : streamOpenAiResponse;
+import { streamAiResponse } from '$lib/server/openAiResponses';
+
 
 
 export async function POST({ request, cookies }) {

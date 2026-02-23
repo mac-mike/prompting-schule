@@ -9,8 +9,8 @@ import { marked } from 'marked';
 
 
 import { requireLogin } from '$lib/server/jwt';
-// import { streamAiResponse as streamOpenAiResponse } from '$lib/server/openAi';
-import { streamAiResponse } from '$lib/server/azureAi';
+
+import { streamAiResponse } from '$lib/server/openAiResponses';
 
 // import { env } from '$env/dynamic/private';
 

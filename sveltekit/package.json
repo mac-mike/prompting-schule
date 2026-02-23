@@ -33,14 +33,13 @@
 		"vitest": "^3.0.0"
 	},
 	"dependencies": {
-		"@azure/openai": "^2.0.0",
 		"@prisma/client": "^6.5.0",
 		"bcrypt": "^6.0.0",
 		"dotenv": "^16.4.7",
 		"jsonwebtoken": "^9.0.2",
 		"marked": "^15.0.7",
 		"nodemailer": "^7.0.13",
-		"openai": "^4.91.1",
+		"openai": "^4.104.0",
 		"openbadges-bakery-v3": "^1.0.6",
 		"pdf-lib": "^1.17.1",
 		"qrcode": "^1.5.4",
