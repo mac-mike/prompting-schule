@@ -30,7 +30,7 @@ let cached: OIDCConfig | null = null;
 export async function getOIDC(): Promise<OIDCConfig> {
     if (cached) return cached;
 
-    const res = await fetch(`${KEYCLOAK_ISSUER}/.well-known/openid-configuration`);
+    const res = await fetch(`${envPrivate.KEYCLOAK_ISSUER}/.well-known/openid-configuration`);
     if (!res.ok) {
         throw new Error(`OIDC discovery failed: ${res.status}`);
     }
@@ -39,7 +39,7 @@ export async function getOIDC(): Promise<OIDCConfig> {
 
     // If Keycloak does not return the logout endpoint, derive it manually
     if (!conf.end_session_endpoint) {
-        conf.end_session_endpoint = `${KEYCLOAK_ISSUER}/protocol/openid-connect/logout`;
+        conf.end_session_endpoint = `${envPrivate.KEYCLOAK_ISSUER}/protocol/openid-connect/logout`;
     }
 
     cached = conf;
