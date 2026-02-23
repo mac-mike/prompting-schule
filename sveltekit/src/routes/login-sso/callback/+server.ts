@@ -40,7 +40,7 @@ export const GET: RequestHandler = async ({ url, cookies, fetch }) => {
         client_id: envPrivate.KEYCLOAK_CLIENT_ID,
         code_verifier: verifier
     });
-    if (KEYCLOAK_CLIENT_SECRET) body.set('client_secret', envPrivate.KEYCLOAK_CLIENT_SECRET);
+    if (envPrivate.KEYCLOAK_CLIENT_SECRET) body.set('client_secret', envPrivate.KEYCLOAK_CLIENT_SECRET);
 
     // Exchange authorization code for tokens
     const tokenRes = await fetch(OIDC.token_endpoint, {
