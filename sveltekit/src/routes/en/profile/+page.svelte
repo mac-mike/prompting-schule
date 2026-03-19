@@ -4,7 +4,7 @@
   
   import type { JwtUserPayload } from '$lib/server/jwt';
   
-  export let data: { user: JwtUserPayload };
+  export let data: { user: JwtUserPayload; hasKeycloakIssuer: boolean };
 
   import { resolve } from '$app/paths';
 
@@ -71,8 +71,8 @@
 
   async function handleDel() {
       
-      if (!password || !email) {
-        delResult = "Both fields are required.";
+      if (!email || (!data.hasKeycloakIssuer && !password)) {
+        delResult = data.hasKeycloakIssuer ? "Email is required." : "Both fields are required.";
 
           return;
       }
@@ -126,6 +126,7 @@
 
     
 
+    {#if !data.hasKeycloakIssuer}
     <div style="margin-bottom: 2em;">
 
     <button class="large" on:click={() => showPwChangeForm = !showPwChangeForm}  style="margin-bottom: 1em;">
@@ -151,6 +152,7 @@
     {/if}
 
   </div>
+  {/if}
     
   <div style="margin-bottom: 2em;">
 
@@ -176,15 +178,17 @@
         <form on:submit|preventDefault={handleDel}>
 
           <p> After submitting the deletion, the link between your account and your email address will be permanently deleted, and you will be logged out.<br>
-            <strong>Important:</strong> After that, it will not be possible to log in with this email address and your password. However, a new account with this email address can be created again if necessary.<br>
+            <strong>Important:</strong> After that, it will not be possible to log in with this email address{#if !data.hasKeycloakIssuer} and your password{/if}. However, a new account with this email address can be created again if necessary.<br>
             <strong>Note:</strong> Certificates and digital badges cannot be downloaded after deletion, and already issued certificates and digital badges can no longer be validated or verified for authenticity.</p>
 
             <br><label for="email">Your email address:</label>
             <input type="email" id="email" bind:value={email} name="email">
             
+            {#if !data.hasKeycloakIssuer}
             <br>
           <label for="password">Your password:</label>
           <input type="password" bind:value={password} name="password">
+          {/if}
 
           
           <br>

@@ -2,6 +2,7 @@ import { json } from '@sveltejs/kit';
 // import { PrismaClient } from '@prisma/client';
 // const prisma = new PrismaClient();
 import { prisma } from '$lib/server/db';
+import { KEYCLOAK_ISSUER } from '$env/static/private';
 
 
 import { comparePassword, comparePasswordV2, hashPasswordV2, login } from '$lib/server/pw.js';
@@ -48,10 +49,12 @@ export async function POST({ request, params, cookies }) {
               return json({ success: false, error: "E-Mail stimmt nicht überein" }, { status: 401 });
           }
 
-          const pwStatus = await comparePasswordV2(formData.password, userDb.password, user.id);
+          if (!KEYCLOAK_ISSUER) {
+              const pwStatus = await comparePasswordV2(formData.password, userDb.password, user.id);
 
-          if (!pwStatus) {
-              return json({ success: false, error: "Passwort ist falsch" }, { status: 401 });
+              if (!pwStatus) {
+                  return json({ success: false, error: "Passwort ist falsch" }, { status: 401 });
+              }
           }
           
           await prisma.user.update({
