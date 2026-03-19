@@ -1,7 +1,9 @@
 import type { RequestHandler } from './$types';
 import { getOIDC } from '$lib/sso/oidc';
-import { PUBLIC_POST_LOGOUT_REDIRECT } from '$env/static/public';
-import { KEYCLOAK_CLIENT_ID } from '$env/static/private';
+import { env as envPublic } from '$env/dynamic/public';
+// import { PUBLIC_POST_LOGOUT_REDIRECT } from '$env/static/public';
+// import { KEYCLOAK_CLIENT_ID } from '$env/static/private';
+import { env as envPrivate } from '$env/dynamic/private';
 import { resolve } from '$app/paths';
 
 function normalizeRedirect(u: string) {
@@ -28,13 +30,13 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
     const OIDC = await getOIDC();
     const u = new URL(OIDC.end_session_endpoint);
 
-    u.searchParams.set('client_id', KEYCLOAK_CLIENT_ID);
+    u.searchParams.set('client_id', envPrivate.KEYCLOAK_CLIENT_ID);
     if (id_token_hint) u.searchParams.set('id_token_hint', id_token_hint);
 
-    let redirect = normalizeRedirect(PUBLIC_POST_LOGOUT_REDIRECT);
+    let redirect = normalizeRedirect(envPublic.PUBLIC_POST_LOGOUT_REDIRECT);
     u.searchParams.set('post_logout_redirect_uri', redirect);
 
-    console.log('ENV', PUBLIC_POST_LOGOUT_REDIRECT);
+    console.log('ENV', envPublic.PUBLIC_POST_LOGOUT_REDIRECT);
     console.log('HOST', url.origin);
 
     // Redirect to Keycloak logout

@@ -58,6 +58,7 @@ model Course {
   description  String?
   
   introDescription  String?
+  introDescriptionSuffix  String?
 
   active  Int     @default(0)
 

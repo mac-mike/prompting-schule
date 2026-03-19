@@ -3,8 +3,8 @@
 // 🔐 OpenID Connect (Keycloak) Configuration
 // =======================================
 
-import { KEYCLOAK_CLIENT_ID, KEYCLOAK_ISSUER } from '$env/static/private';
-import { PUBLIC_REDIRECT_URI } from '$env/static/public';
+import { env as envPrivate } from '$env/dynamic/private';
+import { env as envPublic } from '$env/dynamic/public';
 
 // ---------------------------------------
 // Discovery Support (recommended)
@@ -30,7 +30,7 @@ let cached: OIDCConfig | null = null;
 export async function getOIDC(): Promise<OIDCConfig> {
     if (cached) return cached;
 
-    const res = await fetch(`${KEYCLOAK_ISSUER}/.well-known/openid-configuration`);
+    const res = await fetch(`${envPrivate.KEYCLOAK_ISSUER}/.well-known/openid-configuration`);
     if (!res.ok) {
         throw new Error(`OIDC discovery failed: ${res.status}`);
     }
@@ -39,7 +39,7 @@ export async function getOIDC(): Promise<OIDCConfig> {
 
     // If Keycloak does not return the logout endpoint, derive it manually
     if (!conf.end_session_endpoint) {
-        conf.end_session_endpoint = `${KEYCLOAK_ISSUER}/protocol/openid-connect/logout`;
+        conf.end_session_endpoint = `${envPrivate.KEYCLOAK_ISSUER}/protocol/openid-connect/logout`;
     }
 
     cached = conf;
@@ -93,7 +93,7 @@ export function randomState() {
 // Debug Output
 // ---------------------------------------
 console.log('OIDC DEBUG', {
-    issuer: KEYCLOAK_ISSUER,
-    client_id: KEYCLOAK_CLIENT_ID,
-    redirect_uri: PUBLIC_REDIRECT_URI
+    issuer: envPrivate.KEYCLOAK_ISSUER,
+    client_id: envPrivate.KEYCLOAK_CLIENT_ID,
+    redirect_uri: envPublic.PUBLIC_REDIRECT_URI
 });
