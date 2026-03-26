@@ -6,89 +6,204 @@
 </script>
   
 <Header navItems={[{ name: 'Startseite', href: '/' }, { name: 'Datenschutz', href: '/mehr/datenschutz' }]} />
+
 <main>
-  <h1>Datenschutz und Teilnahmebedingungen</h1>
+  <h1>Datenschutzerklärung</h1>
 
-<div>
+  <div>
+    <p><i>Stand: 2026-02-11</i></p>
 
-  <ol>
-  <li>Grundsatz</li>
-  
-  
-  <p>Der Schutz Ihrer Daten ist uns ein besonderes Anliegen. Wir verarbeiten Ihre Daten daher ausschließlich auf Grundlage der gesetzlichen Bestimmungen (<a href="https://www.dsb.gv.at/recht-entscheidungen/gesetze-in-oesterreich.html" target="_blank" rel="noreferrer noopener">DSGVO, TKG</a>). In diesen Datenschutzinformationen informieren wir Sie über die wichtigsten Aspekte der Datenverarbeitung im Rahmen unserer Website.</p>
-     
-  <li>Zweck und Rechtsgrundlage der Verarbeitung</li>
-  
-  <p>Beim Besuch unserer Website wird Ihre IP-Adresse, Beginn und Ende der Sitzung für die Dauer dieser Sitzung erfasst. Dies ist aus technischem Grund erforderlich und stellt damit ein berechtigtes Interesse i.S.v. Art 6 Abs 1 lit f DSGVO dar. Soweit im Folgenden nichts anderes geregelt wird, werden diese Daten von uns nicht weiterverarbeitet.</p>
-  
-  <p>Die eingegebenen Daten werden für wissenschaftliche Zwecke ausgewertet. Die Ergebnisse helfen uns, die Struktur von Lehr- und Lernangeboten besser zu verstehen. Dabei werden die Daten nicht mit der eingegebenen E-Mail-Adresse verknüpft – nur die jeweilige Person kann ihre eigenen Inhalte einsehen. Für wissenschaftliche Zwecke erfolgt keinerlei Verknüpfung von Inhalten mit E-Mail-Adressen. Es ist nicht gestattet, personenbezogene Daten oder urheberrechtlich geschütztes Material in den Lektionen einzugeben. Beim Herunterladen eines Zertifikats oder Digital Badges wird die E-Mail-Adresse darauf vermerkt. Nur über dieses Zertifikat oder die Datei kann nachvollzogen werden, welche Lektionen abgeschlossen wurden, jedoch nicht, welche Inhalte eingegeben wurden. Der Serverbetreiber (TU Graz) behält sich das Recht vor, bei Verstößen gegen geltende Regeln – insbesondere bei schädlichen Inhalten wie Hassrede oder Diskriminierung – die betroffenen Personen zu kontaktieren.</p>
+    <ol>
+      <li><strong>Kontakt</strong></li>
 
-  <p><strong>2.1 Verwendung von Künstlicher Intelligenz (KI) in interaktiven Lernobjekten</strong></p>
+      <p>
+        Verantwortliche für die Verarbeitung Ihrer personenbezogenen Daten im Rahmen des Betriebs des Chatbots ist die
+        Technische Universität Graz (TU Graz), Rechbauerstraße 12, 8010 Graz.
+      </p>
 
-<p>Unsere Plattform nutzt moderne KI-Technologien zur Unterstützung interaktiver Lernobjekte. Diese kommen insbesondere bei der dynamischen Generierung von Inhalten, bei der Analyse von Eingaben sowie zur Verbesserung der Benutzererfahrung zum Einsatz.</p>
+      <p>
+        Der Datenschutzbeauftragte der TU Graz ist die x-tention Informationstechnologie GmbH, Römerstraße 80A, 4600 Wels,
+        erreichbar unter: datenschutzbeauftragter@tugraz.at.
+      </p>
 
-<p>Die zugrunde liegende KI-Infrastruktur wird durch <strong>Microsoft Azure OpenAI</strong> bereitgestellt, einem Cloud-Dienst der Microsoft Corporation, One Microsoft Way, Redmond, WA 98052-6399, USA. Microsoft verarbeitet im Rahmen dieses Dienstes bestimmte Nutzungs- und Kommunikationsdaten. Dies umfasst u. a.:</p>
+      <p>
+        Bei datenschutzrechtlichen Anliegen wenden Sie sich bitte an: datenschutz@tugraz.at oder an die jeweiligen
+        Kursanbieter:innen. Für Fragen zur Verarbeitung Ihrer Daten durch Microsoft Azure können Sie sich auch direkt an
+        Microsoft wenden: Microsoft Corporation, One Microsoft Way, Redmond, WA 98052-6399, USA oder über
+        <a href="https://support.microsoft.com/contactus" target="_blank" rel="noreferrer noopener">
+          https://support.microsoft.com/contactus
+        </a>.
+      </p>
 
-<ul>
-  <li>Interaktionsdaten (z. B. Eingaben in Lernobjekten)</li>
-  <li>Nutzungsdaten (z. B. Zugriffszeiten, Navigationsverhalten)</li>
-  <li>Systembezogene Metadaten (z. B. IP-Adresse, verwendeter Browser)</li>
-</ul>
+      <li><strong>Zweck der Datenverarbeitung</strong></li>
 
-<p>Die Verarbeitung erfolgt ausschließlich zur Bereitstellung und Wartung der Dienste. Die eingesetzten Modelle lernen nicht aus den individuellen Inhalten der Nutzer:innen. Inhalte werden von Microsoft nicht dauerhaft gespeichert oder für Trainingszwecke verwendet.</p>
+      <p>
+        Die Verarbeitung personenbezogener Daten im Rahmen der Nutzung des LV-Beschreibungs-Chatbots erfolgt zum Zweck:
+      </p>
 
-<p><strong>Rechenzentrumsstandort</strong></p>
+      <ul>
+        <li>der Bereitstellung und des Betriebs der Plattform,</li>
+        <li>der Unterstützung von Lehrenden bei der Erstellung, Überprüfung und Verbesserung von Lehrveranstaltungsbeschreibungen,</li>
+        <li>der Sicherstellung der technischen Funktionalität, Stabilität und Sicherheit des Systems,</li>
+        <li>der Analyse und Verbesserung der Qualität der bereitgestellten KI-gestützten Funktionen.</li>
+      </ul>
 
-<p>Die Speicherung und Verarbeitung der Daten erfolgt in Rechenzentren innerhalb der Europäischen Union. Im Rahmen der Nutzung von Microsoft Azure können Daten an Microsoft übermittelt werden, auch in Länder außerhalb der EU, einschließlich der USA. Microsoft sichert die Einhaltung der geltenden Datenschutzbestimmungen durch den Einsatz von <a href="https://learn.microsoft.com/de-de/compliance/regulatory/offering-eu-model-clauses" target="_blank" rel="noopener noreferrer">Standardvertragsklauseln</a> und anderen geeigneten Schutzmaßnahmen. Weitere Informationen unter <a href="https://learn.microsoft.com/de-de/legal/cognitive-services/openai/data-privacy" target="_blank" rel="noopener noreferrer">Data, privacy, and security for Azure OpenAI Service</a> und in der <a href="https://privacy.microsoft.com/de-de/privacystatement" target="_blank" rel="noopener noreferrer">Datenschutzerklärung von Microsoft</a>.</p>
+      <p>
+        Darüber hinaus können anonymisierte oder pseudonymisierte Daten zur Qualitätssicherung sowie zu wissenschaftlichen
+        Forschungszwecken verarbeitet werden.
+      </p>
 
+      <li><strong>Personenkategorien und Datenkategorien</strong></li>
 
-<b>Vorgaben für die Nutzung</b>
-<p>
-Es ist untersagt, den Chatbot für rechtswidrige Zwecke oder zur Übermittlung von unangemessenen oder unerlaubten Inhalten zu verwenden. Dazu gehören insbesondere, aber nicht ausschließlich, Fragen oder Aussagen zu:
-</p>
-<ul>
-  <li>Gewalt</li>
-<li>
-  Waffen
-</li>
-<li>
-  illegale Aktivitäten
-</li>
-<li>
-  Diskriminierung oder Hassrede
-</li>
-<li>
-  jegliche Inhalte, die gegen geltende Gesetze oder ethische Standards verstoßen
-</li>
-</ul>
-<p>
+      <p>
+        Im Rahmen der Nutzung des LV-Beschreibungs-Chatbots werden die in den Benutzerrichtlinien angeführten
+        Personenkategorien verarbeitet. Die für den Betrieb der Plattform erforderlichen Stammdaten (insbesondere NutzerID,
+        Vor- und Nachname sowie E-Mail-Adresse) werden aus dem datenführenden Identity-Management-System der Technischen
+        Universität Graz übernommen.
+      </p>
 
-Ein Missbrauch der KI-Funktion, insbesondere zur Verarbeitung, Verbreitung oder Suche nach solchen Inhalten, kann zu einem sofortigen Ausschluss von der Nutzung des Dienstes sowie zu weiteren rechtlichen Schritten führen.
-</p>
-  
-  <li>Interne Dienste und interne Datenermittlungen</li>
-  
-  
-  
-  <p>Im Zuge der Verwendung der Plattform werden technisch notwendige Protokolldaten gespeichert. Diese erlauben es der TU Graz, Systemstörungen, Systemfehler, die zu einer Einschränkung der Verfügbarkeit der Online-Angebote führen sowie unerlaubte Zugriffe auf unsere Systeme zu erkennen, einzugrenzen und zu beseitigen. Die Logdaten werden nicht mit anderen personenbezogenen Daten verknüpft. Folgende Datenkategorien werden verarbeitet: Datum und Uhrzeit der Abfrage, Name und URL der abgerufenen Ressourcen, Datenmenge (in Bytes) der angefragten und/oder angerufenen Ressource, Antwort des Servers (z.B. http-Statuscode), Erkennungsdaten des verwendeten Browsers und Betriebssystems, Webseite, von der aus der Zugriff erfolgte, IP-Adresse, Username.</p>
-  
-  
-  
-  <li>Ihre Rechte</li>
-  
-  <p>Sie verfügen über das Recht auf Auskunft, Löschung, Berichtigung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch gegen die Datenverarbeitung. Es besteht ferner ein Beschwerderecht an die Österreichische Datenschutzbehörde, Barichgasse 40-42, 1030 Wien (dsb@dsb.gv.at).</p>
-  
-  
-  
-  <p>Verantwortliche für die Verarbeitung Ihrer personenbezogenen Daten ist die Technische Universität Graz (nachfolgend TU Graz).<br>Datenschutzbeauftragte der TU Graz ist die x-tention Informationsrechnologie GmbH, Römerstraße 80A, 4600 Wels,&nbsp; datenschutzbeauftragter@tugraz.at.<br>Bei datenschutzrechtlichen Anliegen wenden Sie sich bitte an&nbsp;datenschutz@tugraz.at.</p>
-  
-  
-  
-  <p>Datenschutzhinweis mit Unterstützung der <a href="https://www.wko.at/internetrecht/datenschutzerklaerung-checkliste-infopflichten-dsgvo-tkg-we">WKO</a> erstellt.</p>
-  </ol>
+      <p>
+        Neben diesen Stammdaten werden jene personenbezogenen Daten verarbeitet, die im Zuge der Nutzung der Plattform
+        entstehen. Dabei handelt es sich insbesondere um Inhalte der Interaktion mit dem Chatbot (z. B. Texteingaben,
+        Anfragen und vom System generierte Antworten), Nutzungsdaten (z. B. Zeitpunkte und Dauer der Nutzung) sowie
+        technisch erforderliche Metadaten.
+      </p>
 
-Weitere Datenschutzinformationen finden Sie auf <a href="https://bildungsinformatik.at/datenschutz/">https://bildungsinformatik.at/datenschutz/</a>.
+      <p>
+        Darüber hinaus werden im Rahmen der Nutzung technisch notwendige Protokolldaten verarbeitet, um den sicheren und
+        stabilen Betrieb des Systems zu gewährleisten. Diese Daten dienen ausschließlich der Fehleranalyse, der IT-Sicherheit
+        sowie der Sicherstellung der Systemverfügbarkeit und werden nicht mit anderen personenbezogenen Daten zusammengeführt.
+      </p>
 
-</div>
+      <li><strong>Einsatz von Auftragsverarbeitern / Drittanbietern</strong></li>
+
+      <p><strong>Microsoft Azure</strong></p>
+
+      <p>
+        Zur Bereitstellung der KI-gestützten Funktionen des LV-Beschreibungs-Chatbots nutzt die TU Graz Microsoft Azure als
+        technische Backend-Infrastruktur.
+      </p>
+
+      <p>
+        Microsoft Azure ist ein Cloud-Computing-Dienst der Microsoft Corporation, One Microsoft Way, Redmond, WA 98052-6399,
+        USA. Microsoft verarbeitet personenbezogene Daten im Auftrag der TU Graz als Auftragsverarbeiter im Sinne des
+        Art. 28 Datenschutz-Grundverordnung (DSGVO).
+      </p>
+
+      <p>
+        Im Rahmen der Nutzung von Microsoft Azure werden insbesondere folgende Kategorien personenbezogener Daten verarbeitet:
+      </p>
+
+      <ul>
+        <li>Kommunikationsdaten (z. B. Chat-Nachrichten),</li>
+        <li>Nutzungsdaten (z. B. Zugriffszeiten, Interaktionsverhalten),</li>
+        <li>weitere durch die Nutzung des Chatbots generierte technische Daten (z. B. clientseitige Chatbot-Historien).</li>
+      </ul>
+
+      <p>
+        Die von Nutzer:innen über die Chatbot-Funktionalität gestellten Anfragen sowie die vom Chatbot generierten Antworten
+        werden zu Zwecken der Analyse, Qualitätssicherung und Weiterentwicklung des Systems auch auf der TU Graz-eigenen
+        Infrastruktur gespeichert. Wo immer möglich, werden diese Daten anonymisiert oder pseudonymisiert, um die
+        Privatsphäre der Nutzer:innen bestmöglich zu schützen. Darüber hinaus können anonymisierte oder pseudonymisierte Daten
+        für wissenschaftliche Forschungszwecke genutzt werden. Die Ergebnisse dieser Auswertungen sind vollständig anonym und
+        lassen keinen Rückschluss auf einzelne Personen zu.
+      </p>
+
+      <p>
+        Im Rahmen der Nutzung von Microsoft Azure kann es zur Übermittlung personenbezogener Daten an Microsoft sowie zu einer
+        Verarbeitung in Drittländern, insbesondere in den USA, kommen. Der Schutz Ihrer Daten wird durch geeignete Garantien
+        gemäß Art. 46 DSGVO, insbesondere durch den Abschluss von Standardvertragsklauseln, sichergestellt.
+      </p>
+
+      <p>
+        Microsoft verarbeitet die Daten gemäß den geltenden Datenschutzbestimmungen. Weitere Informationen finden Sie in den
+        Datenschutzerklärungen von Microsoft unter:
+      </p>
+
+      <ul>
+        <li>
+          <a href="https://privacy.microsoft.com/de-de/privacystatement" target="_blank" rel="noreferrer noopener">
+            https://privacy.microsoft.com/de-de/privacystatement
+          </a>
+        </li>
+        <li>
+          <a href="https://learn.microsoft.com/de-de/legal/cognitive-services/openai/data-privacy" target="_blank" rel="noreferrer noopener">
+            https://learn.microsoft.com/de-de/legal/cognitive-services/openai/data-privacy
+          </a>
+        </li>
+      </ul>
+
+      <li><strong>Rechtsgrundlagen</strong></li>
+
+      <p>
+        Die Verarbeitung personenbezogener Daten im Rahmen der Nutzung des LV-Beschreibungs-Chatbots erfolgt auf Grundlage
+        der DSGVO.
+      </p>
+
+      <p>
+        Datenverarbeitungen, die zur Bereitstellung und Nutzung der Plattform erforderlich sind, erfolgen auf Grundlage von
+        Art. 6 Abs. 1 lit. b DSGVO (Erfüllung eines Vertrages bzw. Durchführung vorvertraglicher Maßnahmen). Sofern die
+        Bereitstellung personenbezogener Daten für diese Zwecke erforderlich ist, kann eine Nichtbereitstellung dazu führen,
+        dass die Nutzung der Plattform nicht oder nur eingeschränkt möglich ist.
+      </p>
+
+      <p>
+        Soweit die Verarbeitung personenbezogener Daten im Zusammenhang mit der Wahrnehmung von Aufgaben im öffentlichen
+        Interesse erfolgt, insbesondere zur Unterstützung der Lehre an der Technischen Universität Graz, stützt sich diese
+        Verarbeitung auf Art. 6 Abs. 1 lit. e DSGVO in Verbindung mit § 2, § 3 und § 13 UG 2002.
+      </p>
+
+      <p>
+        Sofern bestimmte Verarbeitungen auf einer freiwilligen Einwilligung der Nutzer:innen beruhen, erfolgt die
+        Verarbeitung auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO. Eine erteilte Einwilligung kann jederzeit mit Wirkung für
+        die Zukunft widerrufen werden, wobei die Rechtmäßigkeit der bis zum Widerruf erfolgten Verarbeitung hiervon unberührt
+        bleibt.
+      </p>
+
+      <li><strong>Speicherdauer</strong></li>
+
+      <p>
+        Personenbezogene Daten werden nur so lange gespeichert, wie dies für die Erfüllung der genannten Zwecke erforderlich
+        ist oder gesetzliche Aufbewahrungspflichten bestehen.
+      </p>
+
+      <p>
+        Chat-Interaktionen und Nutzungsdaten werden jeweils bis zum 31.12. gespeichert und anschließend gelöscht oder
+        anonymisiert.
+      </p>
+
+      <p>Technische Logdaten werden zeitlich beschränkt gespeichert und regelmäßig gelöscht.</p>
+
+      <p>
+        Anonymisierte oder pseudonymisierte Daten können zu Forschungs- und Qualitätszwecken längerfristig verarbeitet werden.
+      </p>
+
+      <li><strong>Verarbeitung zu wissenschaftlichen Forschungszwecken</strong></li>
+
+      <p>
+        Die TU Graz verarbeitet pseudonymisierte und anonymisierte Daten in weiterer Folge unter Einhaltung geeigneter
+        technischer und organisatorischer Maßnahmen zu wissenschaftlichen Forschungszwecken, insbesondere um das Verständnis
+        und die Weiterentwicklung der Technologie und der Nutzerinteraktionen zu fördern. Eine Identifizierung einzelner
+        Personen ist dabei ausgeschlossen. Rechtsgrundlage dieser Auswertungen ist das öffentliche Interesse nach Artikel 6
+        Absatz 1 lit e DSGVO.
+      </p>
+
+      <li><strong>Betroffenenrechte</strong></li>
+
+      <p>
+        Sie haben das Recht auf Auskunft, Berichtigung, Übertragbarkeit, Einschränkung, Widerspruch und Löschung der Daten,
+        wobei festgehalten wird, dass eine Nutzung des LV-Beschreibungs-Chatbots ohne die Verarbeitung von personenbezogenen
+        Daten nicht möglich ist. Darüber hinaus besteht ein Widerrufsrecht gegen die Datenverarbeitung. Bedenken Sie aber,
+        dass durch einen Widerruf die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitung nicht berührt wird. Des
+        Weiteren kann eine Ausübung dieser Rechte nicht zu einer Auflösung vertraglicher oder gesetzlicher Pflichten führen.
+      </p>
+
+      <p>
+        Darüber hinaus haben Sie das Recht, sich bei der Österreichischen Datenschutzbehörde zu beschweren, wenn Sie der
+        Ansicht sind, dass die Verarbeitung Ihrer personenbezogenen Daten gegen die DSGVO verstößt.
+      </p>
+    </ol>
+  </div>
+
   <a href={resolve("/")}>Zur Startseite</a>
 </main>
