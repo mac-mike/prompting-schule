@@ -9,14 +9,14 @@
     <h1>Benutzerrichtlinien</h1>
 
     <div>
-        <p><i>Stand: 2026-02-11</i></p>
+        <p><i>Stand: 2026-03-27</i></p>
 
         <ol>
             <li><strong>Geltungsbereich und Zuständigkeit</strong></li>
 
             <p>
                 Diese Benutzerrichtlinien gelten für die durch die Technische Universität Graz (TU Graz) bereitgestellte Plattform
-                LV-Beschreibungs-Chatbot und die damit zusammenhängende technische Infrastruktur und alle darin enthaltenen Inhalte,
+                FLAAIT prompting.schule und die damit zusammenhängende technische Infrastruktur und alle darin enthaltenen Inhalte,
                 Materialien und Dienstleistungen.
             </p>
 
@@ -35,24 +35,29 @@
 
             <li><strong>Zweck</strong></li>
 
-            <p>
-                Der Zweck der Plattform besteht darin, Lehrende der TU Graz bei der Erstellung, Überprüfung und Verbesserung von
-                Lehrveranstaltungsbeschreibungen zu unterstützen.
+          <p>
+                Diese interne Plattform unterstützt Angehörige der TU Graz beim Erlernen und Anwenden effektiver
+                Prompting-Techniken im Umgang mit KI-Systemen.
             </p>
 
             <p>
-                Die Plattform stellt KI-gestützte Rückmeldungen, Empfehlungen und Formulierungshilfen bereit, um die Qualität,
-                Vollständigkeit und Verständlichkeit der Inhalte zu verbessern.
+                Sie bietet praxisnahe Beispiele, Prompt-Anleitungen und KI-gestützte Hilfestellungen, um die Qualität von
+                Eingaben und die daraus resultierenden Ergebnisse gezielt zu verbessern.
             </p>
 
             <p>
-                Die Nutzung dient ausschließlich der Unterstützung. Die Verantwortung für Inhalte liegt weiterhin bei den
-                Lehrenden.
+                Nach erfolgreichem Abschluss können Nutzer:innen einen Digital Badge erhalten, 
+                das die absolvierte Lektion dokumentiert.
             </p>
 
             <p>
-                Inhalte werden bis zum Ende des Kalenderjahres gespeichert. Eine eigene Sicherung liegt in der Verantwortung der
-                Nutzer:innen.
+                Die Plattform dient ausschließlich der Unterstützung beim Kompetenzerwerb im Bereich KI-Nutzung.
+                Die Verantwortung für die Verwendung der generierten Inhalte liegt weiterhin bei den Nutzer:innen.
+            </p>
+
+            <p>
+                Eingegebene Inhalte werden gespeichert. Für eine zusätzliche
+                Sicherung der generierten Inhalte sind die Nutzer:innen selbst verantwortlich, falls dies gewünscht ist.
             </p>
 
             <p>
@@ -81,7 +86,7 @@
             <p><strong>Einwilligung und Rechtsgrundlage</strong></p>
 
             <p>
-                Die Nutzung des Chatbots ist optional. Eine Nicht-Nutzung führt zu keinen Nachteilen.
+                Die Nutzung des Chatbots ist freiwillig. Eine Nicht-Nutzung führt zu keinen Nachteilen.
             </p>
 
             <p>
