@@ -1,6 +1,6 @@
 <script lang="ts">
   import Header from '$lib/Header.svelte';
-  import { resolve } from '$app/paths';
+   import { resolve } from '$app/paths';
 
 
 </script>

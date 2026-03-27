@@ -209,7 +209,7 @@ if (browser) {
                 Die Teilnahme ist freiwillig. 
                 <!-- Die eingegebenen Daten werden für wissenschaftliche Zwecke ausgewertet.<br> -->
                   <!-- <input type="checkbox" bind:checked={agree} required> -->
-                  Sie stimmen den  <a href={resolve("/mehr/datenschutz")} target="_blank">Benutzerrichtlinien</a> zu.
+                  Sie stimmen den  <a href={resolve("/mehr/benutzerrichtlinien")} target="_blank">Benutzerrichtlinien</a> zu.
 
               </label>
           </div>

@@ -37,7 +37,9 @@
       <!-- <a href={resolve("/mehr/badges">Badges</a> -->
       <!-- <a href={resolve("/mehr/zertifikate">Zertifikat</a> -->
       <!-- <a href={resolve("/mehr/didaktisches-konzept">Didaktisches Konzept</a> -->
+      <a href='https://github.com/ed-tech-at/prompting-schule' target="_blank">Code @ GitHub <i class="fab fa-github"></i></a>
       <a href={resolve("/mehr/datenschutz")}>Datenschutz</a>
+      <a href={resolve("/mehr/benutzerrichtlinien")}>Benutzerrichtlinien</a>
       <a href={resolve("/mehr/impressum")}>Impressum</a>
 
 
