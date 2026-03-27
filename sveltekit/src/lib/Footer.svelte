@@ -38,6 +38,7 @@
       <!-- <a href={resolve("/mehr/zertifikate">Zertifikat</a> -->
       <!-- <a href={resolve("/mehr/didaktisches-konzept">Didaktisches Konzept</a> -->
       <a href={resolve("/mehr/datenschutz")}>Datenschutz</a>
+      <a href={resolve("/mehr/benutzerrichtlinien")}>Benutzerrichtlinien</a>
       <a href={resolve("/mehr/impressum")}>Impressum</a>
 
 
