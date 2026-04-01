@@ -23,12 +23,20 @@ export type OIDCConfig = {
 
 let cached: OIDCConfig | null = null;
 
+export function hasOIDCConfig() {
+    return Boolean(envPrivate.KEYCLOAK_ISSUER);
+}
+
 /**
  * Loads the OIDC configuration once from the issuer’s discovery endpoint.
  * Caches the result for all subsequent calls.
  */
 export async function getOIDC(): Promise<OIDCConfig> {
     if (cached) return cached;
+
+    if (!envPrivate.KEYCLOAK_ISSUER) {
+        throw new Error('OIDC is not configured: KEYCLOAK_ISSUER is missing');
+    }
 
     const res = await fetch(`${envPrivate.KEYCLOAK_ISSUER}/.well-known/openid-configuration`);
     if (!res.ok) {
