@@ -12,7 +12,7 @@
 
 
   onMount(() => {
-    if (element.type === "aiSide") {
+    if (element.type === "aiSide" || element.type === "aiSideTool") {
       getUserProgressElementAi1();
       getUserProgressElementAi2();
     }
@@ -701,8 +701,6 @@ if (element.type.includes('negativeMarginTop')) {
     {@html element.description}
   {/if}
 
-  
-
   {#if element.type === "note"}
 
 <section>
@@ -729,7 +727,7 @@ if (element.type.includes('negativeMarginTop')) {
   {/if}
 
 
-  {#if element.type === "aiSide"}
+  {#if element.type === "aiSide" || element.type === "aiSideTool"}
 
 <section>
   {@html element.description}

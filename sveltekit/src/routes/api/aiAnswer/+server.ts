@@ -14,6 +14,24 @@ import { streamAiResponse as streamAzureAiResponse } from '$lib/server/azureAi';
 
 const streamAiResponse = process.env.AZURE_KEY ? streamAzureAiResponse : streamOpenAiResponse;
 
+function parseGermanDate(value: string): Date | null {
+  const match = /^(\d{2})\.(\d{2})\.(\d{4})$/.exec(value.trim());
+  if (!match) return null;
+
+  const [, day, month, year] = match;
+  const date = new Date(Number(year), Number(month) - 1, Number(day));
+
+  return date.getFullYear() === Number(year)
+    && date.getMonth() === Number(month) - 1
+    && date.getDate() === Number(day)
+    ? date
+    : null;
+}
+
+function formatGermanDate(date: Date): string {
+  return `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()}`;
+}
+
 export async function POST({ request, cookies }) {
 	let { data,  action } = await request.json();
 
@@ -49,12 +67,17 @@ export async function POST({ request, cookies }) {
 
   if (action === 'aiSide1') {
     const element = await prisma.element.findUnique({ where: { id: data.elementId } });
+    const today = new Date();
+    const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    const userInput = element.type === 'aiSideTool'
+      ? `Geburtsdatum: ${data.ai1}\nHeutiges Datum: ${todayIso}`
+      : data.ai1;
   
   
     return streamAiResponse({
       messages: [
         { role: 'developer', content: element.devPromptA },
-        { role: 'user', content: data.ai1 }
+        { role: 'user', content: userInput }
       ],
       saveToDb: async (text, usage) => {
         await prisma.userProgress.create({
@@ -77,6 +100,38 @@ export async function POST({ request, cookies }) {
 
   if (action === 'aiSide2') {
     const element = await prisma.element.findUnique({ where: { id: data.elementId } });
+
+    if (element.type === 'aiSideTool') {
+      const today = new Date();
+      const start = parseGermanDate(data.ai2);
+      const end = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      let text: string;
+
+      if (start !== null && start <= end) {
+        const days = Math.floor((end.getTime() - start.getTime()) / 86_400_000);
+        text = `🔧 **Werkzeug-Aufruf:** \`calculate_days_between(${data.ai2}, ${formatGermanDate(end)})\`\n\n✅ **Werkzeug-Ergebnis:** ${days.toLocaleString('de-AT')} Tage`;
+      } else {
+        text = '⚠️ Bitte gib ein gültiges Geburtsdatum im Format TT.MM.JJJJ ein, das nicht in der Zukunft liegt.';
+      }
+      const usage = { promptTokens: 0, completionTokens: 0 };
+
+      await prisma.userProgress.create({
+        data: {
+          userId: data.userId,
+          elementId: data.elementId,
+          courseId: data.courseId,
+          lessonId: data.lessonId,
+          ai2: data.ai2,
+          ai2Result: marked.parse(text),
+          ...usage,
+          promptsTried: 1
+        }
+      });
+
+      return new Response(`${text}\n[__FOOTER__]${JSON.stringify({ __footer: true, ...usage })}`, {
+        headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+      });
+    }
   
   
     return streamAiResponse({
