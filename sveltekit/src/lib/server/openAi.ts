@@ -5,12 +5,54 @@ import { OPENAI_BASE_URL, OPENAI_API_KEY, OPENAI_MODEL } from '$env/static/priva
 import { json } from '@sveltejs/kit';
 import { stringify } from 'openai/internal/qs/stringify.mjs';
 
+const gpt5Verbosity = { verbosity: 'low' as const };
+
 type azureAiParams = {
   messages: { role: 'developer' | 'user' | 'assistant'; content: string }[];
   maxTokens?: number;
   reasoningEffort?: 'minimal';
   saveToDb: (text: string, usage: { promptTokens?: number; completionTokens?: number }) => Promise<void>;
 };
+
+export type ParsedBirthDate = {
+  birthDate: string | null;
+  usage: { promptTokens?: number; completionTokens?: number };
+};
+
+export async function parseBirthDateWithAi(input: string): Promise<ParsedBirthDate> {
+  const client = new OpenAI({
+    apiKey: OPENAI_API_KEY,
+    baseURL: OPENAI_BASE_URL
+  });
+
+  const completion = await client.chat.completions.create({
+    model: OPENAI_MODEL,
+    ...gpt5Verbosity,
+    messages: [
+      {
+        role: 'developer',
+        content: 'Du bist ausschließlich ein Datumsparser. Lies das Geburtsdatum aus der Eingabe. Berechne nichts. Antworte ausschließlich mit dem eindeutigen Datum im Format TT.MM.JJJJ oder mit UNKNOWN, wenn kein eindeutiges Geburtsdatum erkennbar ist. Kein weiterer Text.'
+      },
+      { role: 'user', content: input }
+    ],
+    reasoning_effort: 'minimal' as never,
+    max_completion_tokens: 256
+  });
+
+  const content = completion.choices[0]?.message.content?.trim() ?? '';
+  const match = /\b(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{4})\b/.exec(content);
+  const birthDate = match
+    ? `${match[1].padStart(2, '0')}.${match[2].padStart(2, '0')}.${match[3]}`
+    : null;
+
+  return {
+    birthDate,
+    usage: {
+      promptTokens: completion.usage?.prompt_tokens,
+      completionTokens: completion.usage?.completion_tokens
+    }
+  };
+}
 
 export async function streamAiResponse({ messages, saveToDb, maxTokens = 1000, reasoningEffort }: azureAiParams) {
   const azureLLM = new OpenAI({
@@ -23,6 +65,7 @@ export async function streamAiResponse({ messages, saveToDb, maxTokens = 1000, r
   try {
     stream = await azureLLM.chat.completions.create({
       model: OPENAI_MODEL,
+      ...gpt5Verbosity,
       messages,
       max_completion_tokens: maxTokens,
       ...(reasoningEffort ? { reasoning_effort: reasoningEffort as never } : {}),
