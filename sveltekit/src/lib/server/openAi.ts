@@ -8,10 +8,11 @@ import { stringify } from 'openai/internal/qs/stringify.mjs';
 type azureAiParams = {
   messages: { role: 'developer' | 'user' | 'assistant'; content: string }[];
   maxTokens?: number;
+  reasoningEffort?: 'minimal';
   saveToDb: (text: string, usage: { promptTokens?: number; completionTokens?: number }) => Promise<void>;
 };
 
-export async function streamAiResponse({ messages, saveToDb, maxTokens = 1000 }: azureAiParams) {
+export async function streamAiResponse({ messages, saveToDb, maxTokens = 1000, reasoningEffort }: azureAiParams) {
   const azureLLM = new OpenAI({
     apiKey: OPENAI_API_KEY,
     baseURL: OPENAI_BASE_URL
@@ -23,8 +24,8 @@ export async function streamAiResponse({ messages, saveToDb, maxTokens = 1000 }:
     stream = await azureLLM.chat.completions.create({
       model: OPENAI_MODEL,
       messages,
-      temperature: 0.7,
       max_completion_tokens: maxTokens,
+      ...(reasoningEffort ? { reasoning_effort: reasoningEffort as never } : {}),
       stream: true,
       stream_options: { include_usage: true }
     });

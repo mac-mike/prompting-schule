@@ -8,6 +8,7 @@ import { stringify } from 'openai/internal/qs/stringify.mjs';
 type openAiParams = {
   messages: { role: 'developer' | 'user' | 'assistant'; content: string }[];
   maxTokens?: number;
+  reasoningEffort?: 'minimal';
   saveToDb: (text: string, usage: { promptTokens?: number; completionTokens?: number }) => Promise<void>;
 };
 
