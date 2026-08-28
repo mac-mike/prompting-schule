@@ -12,6 +12,46 @@ type openAiParams = {
   saveToDb: (text: string, usage: { promptTokens?: number; completionTokens?: number }) => Promise<void>;
 };
 
+export type ParsedBirthDate = {
+  birthDate: string | null;
+  usage: { promptTokens?: number; completionTokens?: number };
+};
+
+export async function parseBirthDateWithAi(input: string): Promise<ParsedBirthDate> {
+  const client = new AzureOpenAI({
+    apiKey: AZURE_KEY,
+    endpoint: AZURE_URL,
+    apiVersion: AZURE_API_VERSION
+  });
+
+  const completion = await client.chat.completions.create({
+    model: AZURE_MODEL,
+    ...gpt5Verbosity,
+    messages: [
+      {
+        role: 'developer',
+        content: 'Du bist ausschließlich ein Datumsparser. Lies das Geburtsdatum aus der Eingabe. Berechne nichts. Antworte ausschließlich mit dem eindeutigen Datum im Format TT.MM.JJJJ oder mit UNKNOWN, wenn kein eindeutiges Geburtsdatum erkennbar ist. Kein weiterer Text.'
+      },
+      { role: 'user', content: input }
+    ],
+    max_completion_tokens: 256
+  });
+
+  const content = completion.choices[0]?.message.content?.trim() ?? '';
+  const match = /\b(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{4})\b/.exec(content);
+  const birthDate = match
+      ? `${match[1].padStart(2, '0')}.${match[2].padStart(2, '0')}.${match[3]}`
+      : null;
+
+  return {
+    birthDate,
+    usage: {
+      promptTokens: completion.usage?.prompt_tokens,
+      completionTokens: completion.usage?.completion_tokens
+    }
+  };
+}
+
 export async function streamAiResponse({ messages, saveToDb, maxTokens = 10000 }: openAiParams) {
   const openaiLLM = new OpenAI({
     apiKey: OPENAI_API_KEY,

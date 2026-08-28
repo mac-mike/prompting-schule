@@ -9,23 +9,19 @@ import { marked } from 'marked';
 
 
 import { requireLogin } from '$lib/server/jwt';
+import {
+  parseBirthDateWithAi as parseOpenAiBirthDateWithAi,
+  streamAiResponse as streamOpenAiResponse
+} from '$lib/server/openAi';
+import {
+  parseBirthDateWithAi as parseAzureBirthDateWithAi,
+  streamAiResponse as streamAzureAiResponse
+} from '$lib/server/azureAi';
 
-import { streamAiResponse } from '$lib/server/openAiResponses';
-
-// import { env } from '$env/dynamic/private';
-
-
-// const streamAiResponse = env.AZURE_KEY ? streamAzureAiResponse : streamOpenAiResponse;
-
-// async function streamAiResponse(...args: any[]) {
-  // if (env.AZURE_KEY) {
-    // const mod = await import('$lib/server/azureAi');
-    // return mod.streamAiResponse(...args);
-  // } else {
-    // const mod = await import('$lib/server/openAi');
-    // return mod.streamAiResponse(...args);
-  // }
-// }
+const streamAiResponse = process.env.AZURE_KEY ? streamAzureAiResponse : streamOpenAiResponse;
+const parseBirthDateWithAi = process.env.AZURE_KEY
+  ? parseAzureBirthDateWithAi
+  : parseOpenAiBirthDateWithAi;
 
 function parseGermanDate(value: string): Date | null {
   const match = /^(\d{2})\.(\d{2})\.(\d{4})$/.exec(value.trim());
@@ -45,7 +41,11 @@ function formatGermanDate(date: Date): string {
   return `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()}`;
 }
 
-function delayedToolResponse(chunks: string[], usage: { promptTokens: number; completionTokens: number }): Response {
+function calculateDaysBetween(start: Date, end: Date): number {
+  return Math.floor((end.getTime() - start.getTime()) / 86_400_000);
+}
+
+function delayedToolResponse(chunks: string[], usage: { promptTokens?: number; completionTokens?: number }): Response {
   const encoder = new TextEncoder();
   const delayMs = 800;
 
@@ -187,25 +187,27 @@ export async function POST({ request, cookies }) {
 
     if (element.type === 'aiSideTool') {
       const today = new Date();
-      const start = parseGermanDate(data.ai2);
       const end = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const formattedEnd = formatGermanDate(end);
+      const parsedBirthDate = await parseBirthDateWithAi(data.ai2);
+      const start = parsedBirthDate.birthDate ? parseGermanDate(parsedBirthDate.birthDate) : null;
       let text: string;
       let responseChunks: string[] | null = null;
 
       if (start !== null && start <= end) {
-        const days = Math.floor((end.getTime() - start.getTime()) / 86_400_000);
+        const days = calculateDaysBetween(start, end);
         const formattedDays = days.toLocaleString('de-AT');
         responseChunks = [
-          '**KI:** Ich benötige eine exakte Berechnung. Dafür rufe ich ein Werkzeug auf.\n\n',
-          `<div class="tool-call">🔧 <strong>Werkzeug-Aufruf:</strong> <code>calculate_days_between(${data.ai2}, ${formatGermanDate(end)})</code></div>\n\n`,
+          `Ich habe dein Geburtsdatum als ${formatGermanDate(start)} erkannt und benötige eine exakte Berechnung. Dafür rufe ich ein Werkzeug auf.\n\n`,
+          `<div class="tool-call">🔧 <strong>Werkzeug-Aufruf:</strong> <code>calculate_days_between(${formatGermanDate(start)}, ${formattedEnd})</code></div>\n\n`,
           `<div class="tool-result">✅ <strong>Werkzeug-Ergebnis:</strong> ${formattedDays} Tage</div>\n\n`,
-          `**KI:** Du bist heute ${formattedDays} Tage alt.`
+          `Du bist heute ${formattedDays} Tage alt.`
         ];
         text = responseChunks.join('');
       } else {
-        text = '⚠️ Bitte gib ein gültiges Geburtsdatum im Format TT.MM.JJJJ ein, das nicht in der Zukunft liegt.';
+        text = 'Ich konnte kein eindeutiges, gültiges Geburtsdatum erkennen. Bitte nenne es noch einmal, zum Beispiel „Ich wurde am 3. Mai 2008 geboren.“';
       }
-      const usage = { promptTokens: 0, completionTokens: 0 };
+      const usage = parsedBirthDate.usage;
 
       await prisma.userProgress.create({
         data: {

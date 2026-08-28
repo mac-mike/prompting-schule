@@ -825,7 +825,7 @@ if (element.type.includes('negativeMarginTop')) {
         <strong>Gedächtnis</strong>
         {#each noMemoryTranscript as message}
           <p class:memory-user={message.role === 'user'} class:memory-agent={message.role === 'assistant'}>
-            <strong>{message.role === 'user' ? 'Du' : 'Agent'}:</strong> {@html marked.parse(message.content)}
+            <strong>{message.role === 'user' ? 'Du' : 'KI'}:</strong> {@html marked.parse(message.content)}
           </p>
         {/each}
       </div>
