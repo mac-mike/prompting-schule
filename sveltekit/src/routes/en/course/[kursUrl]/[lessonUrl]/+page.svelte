@@ -113,8 +113,48 @@ textAreas[0].dispatchEvent(new Event('input'));
 
   }
 
+  export function fillBoth(sender) {
+    const row = sender.closest('tr');
+    const prompt = row.querySelector('[data-prompt-for-both]')?.textContent?.trim();
+    const section = sender.closest('section');
+    const textAreas = section.querySelectorAll('.prompt');
+    if (prompt && textAreas.length >= 2) {
+      textAreas[0].value = prompt;
+      textAreas[1].value = prompt;
+      textAreas[0].dispatchEvent(new Event('input'));
+      textAreas[1].dispatchEvent(new Event('input'));
+    }
+  }
+
+  export function copyPreviousAiSideOutput(sender) {
+    const targetElement = sender.closest('.element');
+    let sourceElement = targetElement?.previousElementSibling;
+    while (sourceElement && !sourceElement.querySelector('.aiSide')) {
+      sourceElement = sourceElement.previousElementSibling;
+    }
+
+    const outputs = sourceElement?.querySelectorAll('.aiSide .generated');
+    const leftOutput = outputs?.[0]?.textContent?.trim();
+    const rightOutput = outputs?.[1]?.textContent?.trim();
+    if (!leftOutput || !rightOutput) {
+      window.alert('Please create both AI answers in the exercise above first.');
+      return;
+    }
+
+    const section = sender.closest('section');
+    const textAreas = section.querySelectorAll('.prompt');
+    if (textAreas.length >= 2) {
+      textAreas[0].value = leftOutput;
+      textAreas[1].value = rightOutput;
+      textAreas[0].dispatchEvent(new Event('input'));
+      textAreas[1].dispatchEvent(new Event('input'));
+    }
+  }
+
   if (browser) {
     window.fillSide = fillSide;
+    window.fillBoth = fillBoth;
+    window.copyPreviousAiSideOutput = copyPreviousAiSideOutput;
     window.fill1 = fill1;
     window.fill2 = fill2;
     window.fillMono = fillMono;

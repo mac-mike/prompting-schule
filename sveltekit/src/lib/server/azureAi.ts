@@ -84,7 +84,7 @@ export async function summarizeConversationMemory(
   return completion.choices[0]?.message.content?.trim() || previousSummary;
 }
 
-export async function streamAiResponse({ messages, saveToDb, maxTokens = 1000 }: azureAiParams) {
+export async function streamAiResponse({ messages, saveToDb, maxTokens = 1000, reasoningEffort }: azureAiParams) {
   const azureLLM = new AzureOpenAI({
     apiKey: AZURE_KEY,
     endpoint: AZURE_URL,
@@ -100,6 +100,7 @@ export async function streamAiResponse({ messages, saveToDb, maxTokens = 1000 }:
       messages,
       temperature: 0.7,
       max_completion_tokens: maxTokens,
+      ...(reasoningEffort ? { reasoning_effort: reasoningEffort as never } : {}),
       stream: true,
       stream_options: { include_usage: true }
     });
