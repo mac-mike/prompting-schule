@@ -166,12 +166,10 @@
   let ai2completionTokens = 0;
 
   let betterPrompt = "";
-  type ConversationMessage = { role: 'user' | 'assistant'; content: string };
   let noMemoryInput = "";
   let memoryInput = "";
-  let noMemoryTranscript: ConversationMessage[] = [];
-  let memoryTranscript: ConversationMessage[] = [];
-  let memoryHistory: ConversationMessage[] = [];
+  let noMemorySummary = "";
+  let memorySummary = "";
   let noMemoryRunning = false;
   let memoryRunning = false;
   let noMemoryResult = "";
@@ -196,7 +194,7 @@
       action: isMemoryCondition ? 'memoryWithHistory' : 'memoryNoHistory',
       data: {
         message: input,
-        history: isMemoryCondition ? memoryHistory : [],
+        summary: isMemoryCondition ? memorySummary : '',
         userId: user.id,
         elementId: element.id,
         courseId: course.id,
@@ -212,41 +210,76 @@
         }
       },
       onFooter: () => {
-        const exchange: ConversationMessage[] = [
-          { role: 'user', content: input },
-          { role: 'assistant', content: responseText }
-        ];
-
         if (isMemoryCondition) {
-          memoryTranscript = [...memoryTranscript, ...exchange];
-          memoryHistory = [...memoryHistory, ...exchange];
           memoryInput = '';
-          memoryRunning = false;
         } else {
-          noMemoryTranscript = exchange;
           noMemoryInput = '';
-          noMemoryRunning = false;
         }
       },
       onError: (error) => {
-        const exchange: ConversationMessage[] = [
-          { role: 'user', content: input },
-          { role: 'assistant', content: error }
-        ];
-
         if (isMemoryCondition) {
-          memoryTranscript = [...memoryTranscript, ...exchange];
           memoryInput = '';
           memoryRunning = false;
           memoryResult = error;
         } else {
-          noMemoryTranscript = exchange;
           noMemoryInput = '';
           noMemoryRunning = false;
           noMemoryResult = error;
         }
       }
     });
+
+    if (responseText) {
+      const summary = await createMemorySummary(
+        isMemoryCondition ? memorySummary : '',
+        input,
+        responseText
+      );
+
+      if (summary) {
+        if (isMemoryCondition) {
+          memorySummary = summary;
+        } else {
+          noMemorySummary = summary;
+        }
+      }
+    }
+
+    if (isMemoryCondition) {
+      memoryRunning = false;
+    } else {
+      noMemoryRunning = false;
+    }
+  }
+
+  async function createMemorySummary(previousSummary: string, message: string, assistantResponse: string): Promise<string | null> {
+    try {
+      const response = await fetch('/api/aiAnswer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'memorySummarize',
+          data: {
+            summary: previousSummary,
+            message,
+            assistantResponse,
+            userId: user.id,
+            elementId: element.id,
+            courseId: course.id,
+            lessonId: lesson.id
+          }
+        })
+      });
+
+      const result = await response.json();
+      if (response.ok && typeof result.summary === 'string') {
+        return result.summary;
+      }
+    } catch (error) {
+      console.error('Memory summary could not be updated:', error);
+    }
+
+    return null;
   }
   
 
@@ -822,11 +855,9 @@ if (element.type.includes('negativeMarginTop')) {
 
       <div class="generated memory-transcript">
         <strong>Gedächtnis</strong>
-        {#each noMemoryTranscript as message}
-          <p class:memory-user={message.role === 'user'} class:memory-agent={message.role === 'assistant'}>
-            <strong>{message.role === 'user' ? 'Du' : 'KI'}:</strong> {@html marked.parse(message.content)}
-          </p>
-        {/each}
+        {#if noMemorySummary}
+          <p>{noMemorySummary}</p>
+        {/if}
       </div>
 
       <div class="result">
@@ -848,11 +879,9 @@ if (element.type.includes('negativeMarginTop')) {
 
       <div class="generated memory-transcript">
         <strong>Gedächtnis</strong>
-        {#each memoryTranscript as message}
-          <p class:memory-user={message.role === 'user'} class:memory-agent={message.role === 'assistant'}>
-            <strong>{message.role === 'user' ? 'Du' : 'Agent'}:</strong> {@html marked.parse(message.content)}
-          </p>
-        {/each}
+        {#if memorySummary}
+          <p>{memorySummary}</p>
+        {/if}
       </div>
 
       <div class="result">
