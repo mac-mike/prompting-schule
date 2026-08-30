@@ -11,10 +11,12 @@ import { marked } from 'marked';
 import { requireLogin } from '$lib/server/jwt';
 import {
   parseBirthDateWithAi as parseOpenAiBirthDateWithAi,
+  summarizeConversationMemory as summarizeOpenAiConversationMemory,
   streamAiResponse as streamOpenAiResponse
 } from '$lib/server/openAi';
 import {
   parseBirthDateWithAi as parseAzureBirthDateWithAi,
+  summarizeConversationMemory as summarizeAzureConversationMemory,
   streamAiResponse as streamAzureAiResponse
 } from '$lib/server/azureAi';
 
@@ -22,6 +24,9 @@ const streamAiResponse = process.env.AZURE_KEY ? streamAzureAiResponse : streamO
 const parseBirthDateWithAi = process.env.AZURE_KEY
   ? parseAzureBirthDateWithAi
   : parseOpenAiBirthDateWithAi;
+const summarizeConversationMemory = process.env.AZURE_KEY
+  ? summarizeAzureConversationMemory
+  : summarizeOpenAiConversationMemory;
 
 function parseGermanDate(value: string): Date | null {
   const match = /^(\d{2})\.(\d{2})\.(\d{4})$/.exec(value.trim());
@@ -102,33 +107,37 @@ export async function POST({ request, cookies }) {
     return new Response('<i>Anfrage zu lang</i>', { status: 200 });
   }
 
+  if (action === 'memorySummarize') {
+    const previousSummary = typeof data.summary === 'string' ? data.summary.slice(0, maxLength) : '';
+    const message = typeof data.message === 'string' ? data.message.slice(0, maxLength) : '';
+    const assistantResponse = typeof data.assistantResponse === 'string'
+      ? data.assistantResponse.slice(0, maxLength)
+      : '';
+
+    if (!message || !assistantResponse) {
+      return json({ success: false, error: 'Conversation data is missing.' }, { status: 400 });
+    }
+
+    const summary = await summarizeConversationMemory(previousSummary, message, assistantResponse);
+    return json({ success: true, summary });
+  }
+
   if (action === 'memoryNoHistory' || action === 'memoryWithHistory') {
     const element = await prisma.element.findUnique({ where: { id: data.elementId } });
     if (!element?.devPromptA) {
       return json({ success: false, error: 'Memory exercise not found.' }, { status: 404 });
     }
 
-    const history: { role: 'user' | 'assistant'; content: string }[] = action === 'memoryWithHistory' && Array.isArray(data.history)
-      ? data.history
-          .filter((message: unknown) =>
-            typeof message === 'object'
-            && message !== null
-            && ('role' in message)
-            && ('content' in message)
-            && ((message as { role: string }).role === 'user' || (message as { role: string }).role === 'assistant')
-            && typeof (message as { content: unknown }).content === 'string'
-          )
-          .map((message: unknown) => ({
-            role: (message as { role: 'user' | 'assistant' }).role,
-            content: (message as { content: string }).content
-          }))
-          .slice(-20)
-      : [];
+    const summary = action === 'memoryWithHistory' && typeof data.summary === 'string'
+      ? data.summary.slice(0, maxLength)
+      : '';
 
     return streamAiResponse({
       messages: [
         { role: 'developer', content: element.devPromptA },
-        ...history,
+        ...(summary
+          ? [{ role: 'developer' as const, content: `Kurzzeitgedächtnis (Zusammenfassung):\n${summary}` }]
+          : []),
         { role: 'user', content: data.message }
       ],
       saveToDb: async (text, usage) => {

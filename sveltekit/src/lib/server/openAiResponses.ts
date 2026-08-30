@@ -52,6 +52,36 @@ export async function parseBirthDateWithAi(input: string): Promise<ParsedBirthDa
   };
 }
 
+export async function summarizeConversationMemory(
+    previousSummary: string,
+    userMessage: string,
+    assistantResponse: string
+): Promise<string> {
+    const client = new AzureOpenAI({
+        apiKey: AZURE_KEY,
+        endpoint: AZURE_URL,
+        apiVersion: AZURE_API_VERSION
+    });
+
+    const completion = await client.chat.completions.create({
+        model: AZURE_MODEL,
+        ...gpt5Verbosity,
+        messages: [
+            {
+                role: 'developer',
+                content: 'Erstelle ein kurzes, sachliches Kurzzeitgedächtnis für eine Pizzabestellung. Behalte nur bestätigte Bestelldetails, Ergänzungen, Änderungen. Fasse frühere Angaben zusammen statt sie zu zitieren. Füge keine Informationen hinzu, es muss eine reine Zusammenfassung sein. Höchstens 80 Wörter.'
+            },
+            {
+                role: 'user',
+                content: `Bisherige Zusammenfassung:\n${previousSummary || '(keine)'}\n\nNeue Nachricht:\n${userMessage}\n\nAntwort des Assistenten:\n${assistantResponse}`
+            }
+        ],
+        max_completion_tokens: 200
+    });
+
+    return completion.choices[0]?.message.content?.trim() || previousSummary;
+}
+
 export async function streamAiResponse({ messages, saveToDb, maxTokens = 10000 }: openAiParams) {
   const openaiLLM = new OpenAI({
     apiKey: OPENAI_API_KEY,
