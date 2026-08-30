@@ -140,6 +140,7 @@ export async function POST({ request, cookies }) {
           : []),
         { role: 'user', content: data.message }
       ],
+      reasoningEffort: 'minimal',
       saveToDb: async (text, usage) => {
         await prisma.userProgress.create({
           data: {
@@ -159,6 +160,7 @@ export async function POST({ request, cookies }) {
 
   if (action === 'aiSide1') {
     const element = await prisma.element.findUnique({ where: { id: data.elementId } });
+    const useMinimalReasoning = element.type === 'aiSideTool' || element.lessonId === 7;
     const today = new Date();
     const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     const userInput = element.type === 'aiSideTool'
@@ -171,7 +173,7 @@ export async function POST({ request, cookies }) {
         { role: 'developer', content: element.devPromptA },
         { role: 'user', content: userInput }
       ],
-      reasoningEffort: element.type === 'aiSideTool' ? 'minimal' : undefined,
+      reasoningEffort: useMinimalReasoning ? 'minimal' : undefined,
       saveToDb: async (text, usage) => {
         await prisma.userProgress.create({
           data: {
@@ -193,6 +195,7 @@ export async function POST({ request, cookies }) {
 
   if (action === 'aiSide2') {
     const element = await prisma.element.findUnique({ where: { id: data.elementId } });
+    const useMinimalReasoning = element.type === 'aiSideTool' || element.lessonId === 7;
 
     if (element.type === 'aiSideTool') {
       const today = new Date();
@@ -246,6 +249,7 @@ export async function POST({ request, cookies }) {
         { role: 'developer', content: element.devPromptB },
         { role: 'user', content: data.ai2 }
       ],
+      reasoningEffort: useMinimalReasoning ? 'minimal' : undefined,
       saveToDb: async (text, usage) => {
         await prisma.userProgress.create({
           data: {
