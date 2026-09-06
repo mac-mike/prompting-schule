@@ -281,6 +281,10 @@
 
     return null;
   }
+
+  function clearMemory() {
+    memorySummary = '';
+  }
   
 
   function startTimer (number) {
@@ -882,6 +886,14 @@ if (element.type.includes('negativeMarginTop')) {
         {#if memorySummary}
           <p>{memorySummary}</p>
         {/if}
+        <button
+          type="button"
+          class="clear-memory"
+          disabled={!memorySummary || memoryRunning}
+          on:click={clearMemory}
+        >
+          Gedächtnis löschen
+        </button>
       </div>
 
       <div class="result">
@@ -1391,6 +1403,22 @@ if (element.type.includes('negativeMarginTop')) {
 
   .memory-transcript .memory-agent {
     color: #4f4050;
+  }
+
+  .clear-memory {
+    background: transparent;
+    border: 1px solid #7a2448;
+    border-radius: 0.25rem;
+    color: #7a2448;
+    cursor: pointer;
+    font-size: 0.85em;
+    margin-top: 0.5rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .clear-memory:disabled {
+    cursor: default;
+    opacity: 0.5;
   }
 
   .laborSide {
