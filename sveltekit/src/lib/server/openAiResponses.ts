@@ -1,14 +1,10 @@
-import { marked } from 'marked';
 import { OpenAI } from 'openai';
 import { OPENAI_BASE_URL, OPENAI_API_KEY, OPENAI_MODEL } from '$env/static/private';
-
-import { json } from '@sveltejs/kit';
 import { stringify } from 'openai/internal/qs/stringify.mjs';
 
 type openAiParams = {
   messages: { role: 'developer' | 'user' | 'assistant'; content: string }[];
   maxTokens?: number;
-  reasoningEffort?: 'minimal';
   saveToDb: (text: string, usage: { promptTokens?: number; completionTokens?: number }) => Promise<void>;
 };
 
@@ -18,26 +14,21 @@ export type ParsedBirthDate = {
 };
 
 export async function parseBirthDateWithAi(input: string): Promise<ParsedBirthDate> {
-  const client = new AzureOpenAI({
-    apiKey: AZURE_KEY,
-    endpoint: AZURE_URL,
-    apiVersion: AZURE_API_VERSION
+  const client = new OpenAI({
+    apiKey: OPENAI_API_KEY,
+    baseURL: OPENAI_BASE_URL
   });
 
-  const completion = await client.chat.completions.create({
-    model: AZURE_MODEL,
-    ...gpt5Verbosity,
-    messages: [
-      {
-        role: 'developer',
-        content: 'Du bist ausschließlich ein Datumsparser. Lies das Geburtsdatum aus der Eingabe. Berechne nichts. Antworte ausschließlich mit dem eindeutigen Datum im Format TT.MM.JJJJ oder mit UNKNOWN, wenn kein eindeutiges Geburtsdatum erkennbar ist. Kein weiterer Text.'
-      },
-      { role: 'user', content: input }
-    ],
-    max_completion_tokens: 256
+  const response = await client.responses.create({
+    model: OPENAI_MODEL,
+    instructions: 'Du bist ausschließlich ein Datumsparser. Lies das Geburtsdatum aus der Eingabe. Berechne nichts. Antworte ausschließlich mit dem eindeutigen Datum im Format TT.MM.JJJJ oder mit UNKNOWN, wenn kein eindeutiges Geburtsdatum erkennbar ist. Kein weiterer Text.',
+    input,
+    reasoning: { effort: 'low' },
+    text: { verbosity: 'low' } as never,
+    max_output_tokens: 256
   });
 
-  const content = completion.choices[0]?.message.content?.trim() ?? '';
+  const content = response.output_text.trim();
   const match = /\b(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{4})\b/.exec(content);
   const birthDate = match
       ? `${match[1].padStart(2, '0')}.${match[2].padStart(2, '0')}.${match[3]}`
@@ -46,8 +37,8 @@ export async function parseBirthDateWithAi(input: string): Promise<ParsedBirthDa
   return {
     birthDate,
     usage: {
-      promptTokens: completion.usage?.prompt_tokens,
-      completionTokens: completion.usage?.completion_tokens
+      promptTokens: response.usage?.input_tokens,
+      completionTokens: response.usage?.output_tokens
     }
   };
 }
@@ -57,32 +48,28 @@ export async function summarizeConversationMemory(
     userMessage: string,
     assistantResponse: string
 ): Promise<string> {
-    const client = new AzureOpenAI({
-        apiKey: AZURE_KEY,
-        endpoint: AZURE_URL,
-        apiVersion: AZURE_API_VERSION
+    const client = new OpenAI({
+        apiKey: OPENAI_API_KEY,
+        baseURL: OPENAI_BASE_URL
     });
 
-    const completion = await client.chat.completions.create({
-        model: AZURE_MODEL,
-        ...gpt5Verbosity,
-        messages: [
-            {
-                role: 'developer',
-                content: 'Erstelle ein kurzes, sachliches Kurzzeitgedächtnis für eine Pizzabestellung. Behalte nur bestätigte Bestelldetails, Ergänzungen, Änderungen. Fasse frühere Angaben zusammen statt sie zu zitieren. Füge keine Informationen hinzu, es muss eine reine Zusammenfassung sein. Höchstens 80 Wörter.'
-            },
-            {
-                role: 'user',
-                content: `Bisherige Zusammenfassung:\n${previousSummary || '(keine)'}\n\nNeue Nachricht:\n${userMessage}\n\nAntwort des Assistenten:\n${assistantResponse}`
-            }
-        ],
-        max_completion_tokens: 200
+    const response = await client.responses.create({
+        model: OPENAI_MODEL,
+        instructions: 'Erstelle ein kurzes, sachliches Kurzzeitgedächtnis für eine Pizzabestellung. Behalte nur bestätigte Bestelldetails, Ergänzungen, Änderungen. Fasse frühere Angaben zusammen statt sie zu zitieren. Füge keine Informationen hinzu, es muss eine reine Zusammenfassung sein. Höchstens 80 Wörter.',
+        input: `Bisherige Zusammenfassung:\n${previousSummary || '(keine)'}\n\nNeue Nachricht:\n${userMessage}\n\nAntwort des Assistenten:\n${assistantResponse}`,
+        reasoning: { effort: 'low' },
+        text: { verbosity: 'low' } as never,
+        max_output_tokens: 200
     });
 
-    return completion.choices[0]?.message.content?.trim() || previousSummary;
+    return response.output_text.trim() || previousSummary;
 }
 
-export async function streamAiResponse({ messages, saveToDb, maxTokens = 10000 }: openAiParams) {
+export async function streamAiResponse({
+  messages,
+  saveToDb,
+  maxTokens = 10000
+}: openAiParams) {
   const openaiLLM = new OpenAI({
     apiKey: OPENAI_API_KEY,
     baseURL: OPENAI_BASE_URL,
@@ -96,11 +83,9 @@ export async function streamAiResponse({ messages, saveToDb, maxTokens = 10000 }
       input: messages,
       max_output_tokens: maxTokens,
       reasoning: {
-        effort: "low"
+        effort: 'low'
       },
-      text: {
-        verbosity: 'low'
-      },
+      text: { verbosity: 'low' } as never,
       stream: true
     });
   } catch (err: any) {

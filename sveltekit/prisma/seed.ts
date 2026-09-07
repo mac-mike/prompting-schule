@@ -26,7 +26,11 @@ async function seedDevelopmentUser() {
     throw new Error('Development user cannot be seeded: SERVER_PW_PEPPER is not set.')
   }
 
-  const isAdmin = process.env.DEV_USER_IS_ADMIN === '1' ? 1 : 0
+  const isAdmin = Number(process.env.DEV_USER_ROLE ?? 0)
+
+  if (!Number.isInteger(isAdmin) || isAdmin < 0 || isAdmin > 7) {
+    throw new Error('DEV_USER_ROLE must be an integer between 0 and 7.')
+  }
   const existingUser = await prisma.user.findUnique({ where: { email } })
   const id = existingUser?.id ?? randomUUID()
   // Must match hashPasswordV2 in src/lib/server/pw.ts: password + pepper + userId.
