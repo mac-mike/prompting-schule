@@ -2,8 +2,7 @@ import type { PageServerLoad } from './$types';
 import { prisma } from '$lib/server/db';
 import { requireLogin } from '$lib/server/jwt';
 import { error, redirect } from '@sveltejs/kit';
-import { resolve } from '$app/paths';
-
+import { withBase } from '$lib/server/subfolder';
 export const load: PageServerLoad = async ({ params, cookies }) => {
   const user = requireLogin(cookies);
   const course = await prisma.course.findUnique({ where: { URL: params.kursUrl } });
@@ -38,7 +37,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 
 
   if (lesson.starsNeeded > 0 && (!bestQuiz || bestQuiz.percentReached < 75)) {
-    throw redirect(302, resolve('/en/courses'));
+    throw redirect(302, withBase('/en/courses'));
   }
 
   const aggregate = await prisma.userProgress.aggregate({
@@ -54,7 +53,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
   const maxPrompts = aggregate._sum.promptsTried || 0;
 
   if (maxPrompts == 0) {
-    throw redirect(302, resolve('/en/courses'));
+    throw redirect(302, withBase('/en/courses'));
   }
 
   return {
