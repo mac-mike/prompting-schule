@@ -116,14 +116,56 @@ textAreas[0].dispatchEvent(new Event('input'));
 
   }
 
+  export function fillBoth(sender) {
+    const row = sender.closest('tr');
+    const prompt = row.querySelector('[data-prompt-for-both]')?.textContent?.trim();
+    const section = sender.closest('section');
+    const textAreas = section.querySelectorAll('.prompt');
+    if (prompt && textAreas.length >= 2) {
+      textAreas[0].value = prompt;
+      textAreas[1].value = prompt;
+      textAreas[0].dispatchEvent(new Event('input'));
+      textAreas[1].dispatchEvent(new Event('input'));
+    }
+  }
+
+  export function copyPreviousAiSideOutput(sender) {
+    const targetElement = sender.closest('.element');
+    let sourceElement = targetElement?.previousElementSibling;
+    while (sourceElement && !sourceElement.querySelector('.aiSide')) {
+      sourceElement = sourceElement.previousElementSibling;
+    }
+
+    const outputs = sourceElement?.querySelectorAll('.aiSide .generated');
+    const leftOutput = outputs?.[0]?.textContent?.trim();
+    const rightOutput = outputs?.[1]?.textContent?.trim();
+    if (!leftOutput || !rightOutput) {
+      window.alert('Please create both AI answers in the exercise above first.');
+      return;
+    }
+
+    const section = sender.closest('section');
+    const textAreas = section.querySelectorAll('.prompt');
+    if (textAreas.length >= 2) {
+      textAreas[0].value = leftOutput;
+      textAreas[1].value = rightOutput;
+      textAreas[0].dispatchEvent(new Event('input'));
+      textAreas[1].dispatchEvent(new Event('input'));
+    }
+  }
+
   if (browser) {
     const appWindow = window as typeof window & {
       fillSide: typeof fillSide;
+      fillBoth: typeof fillBoth;
+      copyPreviousAiSideOutput: typeof copyPreviousAiSideOutput;
       fill1: typeof fill1;
       fill2: typeof fill2;
       fillMono: typeof fillMono;
     };
     appWindow.fillSide = fillSide;
+    appWindow.fillBoth = fillBoth;
+    appWindow.copyPreviousAiSideOutput = copyPreviousAiSideOutputM
     appWindow.fill1 = fill1;
     appWindow.fill2 = fill2;
     appWindow.fillMono = fillMono;

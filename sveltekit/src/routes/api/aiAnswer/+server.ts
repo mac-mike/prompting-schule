@@ -9,23 +9,11 @@ import { marked } from 'marked';
 
 
 import { requireLogin } from '$lib/server/jwt';
-
-import { streamAiResponse } from '$lib/server/openAiResponses';
-
-// import { env } from '$env/dynamic/private';
-
-
-// const streamAiResponse = env.AZURE_KEY ? streamAzureAiResponse : streamOpenAiResponse;
-
-// async function streamAiResponse(...args: any[]) {
-  // if (env.AZURE_KEY) {
-    // const mod = await import('$lib/server/azureAi');
-    // return mod.streamAiResponse(...args);
-  // } else {
-    // const mod = await import('$lib/server/openAi');
-    // return mod.streamAiResponse(...args);
-  // }
-// }
+import {
+  parseBirthDateWithAi,
+  summarizeConversationMemory,
+  streamAiResponse
+} from '$lib/server/openAiResponses';
 
 function parseGermanDate(value: string): Date | null {
   const match = /^(\d{2})\.(\d{2})\.(\d{4})$/.exec(value.trim());
@@ -45,7 +33,11 @@ function formatGermanDate(date: Date): string {
   return `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()}`;
 }
 
-function delayedToolResponse(chunks: string[], usage: { promptTokens: number; completionTokens: number }): Response {
+function calculateDaysBetween(start: Date, end: Date): number {
+  return Math.floor((end.getTime() - start.getTime()) / 86_400_000);
+}
+
+function delayedToolResponse(chunks: string[], usage: { promptTokens?: number; completionTokens?: number }): Response {
   const encoder = new TextEncoder();
   const delayMs = 800;
 
@@ -102,33 +94,37 @@ export async function POST({ request, cookies }) {
     return new Response('<i>Anfrage zu lang</i>', { status: 200 });
   }
 
+  if (action === 'memorySummarize') {
+    const previousSummary = typeof data.summary === 'string' ? data.summary.slice(0, maxLength) : '';
+    const message = typeof data.message === 'string' ? data.message.slice(0, maxLength) : '';
+    const assistantResponse = typeof data.assistantResponse === 'string'
+      ? data.assistantResponse.slice(0, maxLength)
+      : '';
+
+    if (!message || !assistantResponse) {
+      return json({ success: false, error: 'Conversation data is missing.' }, { status: 400 });
+    }
+
+    const summary = await summarizeConversationMemory(previousSummary, message, assistantResponse);
+    return json({ success: true, summary });
+  }
+
   if (action === 'memoryNoHistory' || action === 'memoryWithHistory') {
     const element = await prisma.element.findUnique({ where: { id: data.elementId } });
     if (!element?.devPromptA) {
       return json({ success: false, error: 'Memory exercise not found.' }, { status: 404 });
     }
 
-    const history: { role: 'user' | 'assistant'; content: string }[] = action === 'memoryWithHistory' && Array.isArray(data.history)
-      ? data.history
-          .filter((message: unknown) =>
-            typeof message === 'object'
-            && message !== null
-            && ('role' in message)
-            && ('content' in message)
-            && ((message as { role: string }).role === 'user' || (message as { role: string }).role === 'assistant')
-            && typeof (message as { content: unknown }).content === 'string'
-          )
-          .map((message: unknown) => ({
-            role: (message as { role: 'user' | 'assistant' }).role,
-            content: (message as { content: string }).content
-          }))
-          .slice(-20)
-      : [];
+    const summary = action === 'memoryWithHistory' && typeof data.summary === 'string'
+      ? data.summary.slice(0, maxLength)
+      : '';
 
     return streamAiResponse({
       messages: [
         { role: 'developer', content: element.devPromptA },
-        ...history,
+        ...(summary
+          ? [{ role: 'developer' as const, content: `Kurzzeitgedächtnis (Zusammenfassung):\n${summary}` }]
+          : []),
         { role: 'user', content: data.message }
       ],
       saveToDb: async (text, usage) => {
@@ -186,25 +182,27 @@ export async function POST({ request, cookies }) {
 
     if (element.type === 'aiSideTool') {
       const today = new Date();
-      const start = parseGermanDate(data.ai2);
       const end = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const formattedEnd = formatGermanDate(end);
+      const parsedBirthDate = await parseBirthDateWithAi(data.ai2);
+      const start = parsedBirthDate.birthDate ? parseGermanDate(parsedBirthDate.birthDate) : null;
       let text: string;
       let responseChunks: string[] | null = null;
 
       if (start !== null && start <= end) {
-        const days = Math.floor((end.getTime() - start.getTime()) / 86_400_000);
+        const days = calculateDaysBetween(start, end);
         const formattedDays = days.toLocaleString('de-AT');
         responseChunks = [
-          '**KI:** Ich benötige eine exakte Berechnung. Dafür rufe ich ein Werkzeug auf.\n\n',
-          `<div class="tool-call">🔧 <strong>Werkzeug-Aufruf:</strong> <code>calculate_days_between(${data.ai2}, ${formatGermanDate(end)})</code></div>\n\n`,
+          `Ich habe dein Geburtsdatum als ${formatGermanDate(start)} erkannt und benötige eine exakte Berechnung. Dafür rufe ich ein Werkzeug auf.\n\n`,
+          `<div class="tool-call">🔧 <strong>Werkzeug-Aufruf:</strong> <code>calculate_days_between(${formatGermanDate(start)}, ${formattedEnd})</code></div>\n\n`,
           `<div class="tool-result">✅ <strong>Werkzeug-Ergebnis:</strong> ${formattedDays} Tage</div>\n\n`,
-          `**KI:** Du bist heute ${formattedDays} Tage alt.`
+          `Du bist heute ${formattedDays} Tage alt.`
         ];
         text = responseChunks.join('');
       } else {
-        text = '⚠️ Bitte gib ein gültiges Geburtsdatum im Format TT.MM.JJJJ ein, das nicht in der Zukunft liegt.';
+        text = 'Ich konnte kein eindeutiges, gültiges Geburtsdatum erkennen. Bitte nenne es noch einmal, zum Beispiel „Ich wurde am 3. Mai 2008 geboren.“';
       }
-      const usage = { promptTokens: 0, completionTokens: 0 };
+      const usage = parsedBirthDate.usage;
 
       await prisma.userProgress.create({
         data: {
