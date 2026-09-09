@@ -1,21 +1,8 @@
 import type { RequestHandler } from './$types';
-import { getOIDC } from '$lib/sso/oidc';
-import {
-    // KEYCLOAK_CLIENT_ID,
-    // KEYCLOAK_CLIENT_SECRET,
-    env as envPrivate
-    // SESSION_JWT_SECRET
-} from '$env/dynamic/private';
-import { env as envPublic } from '$env/dynamic/public';
-import { resolve } from '$app/paths';
-
+import { getOIDC, getRedirectUri } from '$lib/sso/oidc';
+import { env as envPrivate } from '$env/dynamic/private';
 import { loginSso } from '$lib/server/pw';
-import { env } from '$env/dynamic/private';
-
-// import { SignJWT } from 'jose';
-
-const enc = new TextEncoder();
-// const jwtSecret = enc.encode(SESSION_JWT_SECRET);
+import { getCookiePath } from '$lib/server/subfolder';
 
 export const GET: RequestHandler = async ({ url, cookies, fetch }) => {
     // Read OAuth parameters from the redirect callback
@@ -32,12 +19,12 @@ export const GET: RequestHandler = async ({ url, cookies, fetch }) => {
     // Load OIDC discovery info
     const OIDC = await getOIDC();
 
-    // Build token request
+    // Build token request – redirect_uri must match start-login byte for byte
     const body = new URLSearchParams({
         grant_type: 'authorization_code',
         code,
-        redirect_uri: envPublic.PUBLIC_REDIRECT_URI,
-        client_id: envPrivate.KEYCLOAK_CLIENT_ID,
+        redirect_uri: getRedirectUri(url),
+        client_id: envPrivate.KEYCLOAK_CLIENT_ID ?? '',
         code_verifier: verifier
     });
     if (envPrivate.KEYCLOAK_CLIENT_SECRET) body.set('client_secret', envPrivate.KEYCLOAK_CLIENT_SECRET);
@@ -63,18 +50,11 @@ export const GET: RequestHandler = async ({ url, cookies, fetch }) => {
     if (!meRes.ok) return new Response('Userinfo failed', { status: 401 });
     const user = await meRes.json();
 
-
-    // const maxAge = tokens.expires_in ?? 3600;
-    const maxAge = 3600;
-
-
-    const SUBFOLDER = env.SUBFOLDER ?? "";
-
-    const path = "/" + SUBFOLDER;
-
+    // Clean up temporary PKCE and state cookies
+    const path = getCookiePath();
     try {
-        cookies.delete('pkce_verifier', { path: path });
-        cookies.delete('oauth_state', { path: path });
+        cookies.delete('pkce_verifier', { path });
+        cookies.delete('oauth_state', { path });
         if (path !== '/') {
             cookies.delete('pkce_verifier', { path: '/' });
             cookies.delete('oauth_state', { path: '/' });
@@ -83,53 +63,6 @@ export const GET: RequestHandler = async ({ url, cookies, fetch }) => {
         console.warn('Failed to delete PKCE/state cookies:', e);
     }
 
+    // Creates/updates the local user, sets the jwt cookie and redirects to /profil
     return loginSso(user);
-    
-    return new Response(null, {
-        status: 302,
-        headers: { Location: resolve('/profil') }
-    });
-
-    // Create signed JWT session cookie
-    const jwt = await new SignJWT({
-        user,
-        // id_token: tokens.id_token,
-        // access_token: tokens.access_token,
-        // refresh_token: tokens.refresh_token,
-        // iss: 'app',
-        // aud: KEYCLOAK_CLIENT_ID
-    })
-        .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
-        .setSubject(user.sub ?? user.preferred_username ?? user.email ?? 'user')
-        .setIssuedAt()
-        // pass expiration as a relative time string (e.g. "3600s") so jose sets exp = now + maxAge
-        .setExpirationTime(`${maxAge}s`)
-        .sign(jwtSecret);
-
-    cookies.set('jwt', jwt, {
-        httpOnly: true,
-        sameSite: 'strict',
-        secure: true,
-        path: resolve('/'),
-        maxAge
-    });
-
-    // Clean up temporary PKCE and state cookies
-    const basePath = resolve('/');
-    try {
-        cookies.delete('pkce_verifier', { path: basePath });
-        cookies.delete('oauth_state', { path: basePath });
-        if (basePath !== '/') {
-            cookies.delete('pkce_verifier', { path: '/' });
-            cookies.delete('oauth_state', { path: '/' });
-        }
-    } catch (e) {
-        console.warn('Failed to delete PKCE/state cookies:', e);
-    }
-
-    // Redirect to app root
-    return new Response(null, {
-        status: 302,
-        headers: { Location: resolve('/') }
-    });
 };

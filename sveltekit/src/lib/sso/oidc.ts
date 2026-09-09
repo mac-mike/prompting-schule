@@ -5,6 +5,7 @@
 
 import { env as envPrivate } from '$env/dynamic/private';
 import { env as envPublic } from '$env/dynamic/public';
+import { absoluteUrl } from '$lib/server/subfolder';
 
 // ---------------------------------------
 // Discovery Support (recommended)
@@ -17,7 +18,7 @@ export type OIDCConfig = {
     authorization_endpoint: string;
     token_endpoint: string;
     userinfo_endpoint: string;
-    end_session_endpoint?: string;
+    end_session_endpoint: string;
     jwks_uri: string;
 };
 
@@ -43,7 +44,7 @@ export async function getOIDC(): Promise<OIDCConfig> {
         throw new Error(`OIDC discovery failed: ${res.status}`);
     }
 
-    const conf = await res.json();
+    const conf: OIDCConfig = await res.json();
 
     // If Keycloak does not return the logout endpoint, derive it manually
     if (!conf.end_session_endpoint) {
@@ -98,10 +99,22 @@ export function randomState() {
 }
 
 // ---------------------------------------
-// Debug Output
+// Redirect URIs (inkl. Subfolder)
 // ---------------------------------------
-console.log('OIDC DEBUG', {
-    issuer: envPrivate.KEYCLOAK_ISSUER,
-    client_id: envPrivate.KEYCLOAK_CLIENT_ID,
-    redirect_uri: envPublic.PUBLIC_REDIRECT_URI
-});
+
+/**
+ * redirect_uri für den Authorization-Code-Flow.
+ * PUBLIC_REDIRECT_URI überschreibt; sonst aus PUBLIC_APP_URL-Origin + SUBFOLDER + /login-sso/callback.
+ * Muss in start-login und callback identisch sein (Keycloak vergleicht exakt).
+ */
+export function getRedirectUri(requestUrl: URL): string {
+    return envPublic.PUBLIC_REDIRECT_URI || absoluteUrl('/login-sso/callback', requestUrl);
+}
+
+/**
+ * post_logout_redirect_uri nach dem Keycloak-Logout.
+ * PUBLIC_POST_LOGOUT_REDIRECT überschreibt; sonst App-Root inkl. SUBFOLDER.
+ */
+export function getPostLogoutRedirect(requestUrl: URL): string {
+    return envPublic.PUBLIC_POST_LOGOUT_REDIRECT || absoluteUrl('/', requestUrl);
+}
