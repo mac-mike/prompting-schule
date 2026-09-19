@@ -129,7 +129,7 @@ textAreas[0].dispatchEvent(new Event('input'));
     }
   }
 
-  export function copyPreviousAiSideOutput(sender) {
+  export function copyPreviousAiSideOutput(sender: HTMLElement, side: 0 | 1 = 0) {
     const targetElement = sender.closest('.element');
     let sourceElement = targetElement?.previousElementSibling;
     while (sourceElement && !sourceElement.querySelector('.aiSide')) {
@@ -137,20 +137,18 @@ textAreas[0].dispatchEvent(new Event('input'));
     }
 
     const outputs = sourceElement?.querySelectorAll('.aiSide .generated');
-    const leftOutput = outputs?.[0]?.textContent?.trim();
-    const rightOutput = outputs?.[1]?.textContent?.trim();
-    if (!leftOutput || !rightOutput) {
-      window.alert('Please create both AI answers in the exercise above first.');
+    const output = outputs?.[side]?.textContent?.trim();
+    if (!output) {
+      window.alert(side === 0
+        ? 'Please create the left AI answer in the exercise above first.'
+        : 'Please create the right AI answer in the exercise above first.');
       return;
     }
 
-    const section = sender.closest('section');
-    const textAreas = section.querySelectorAll('.prompt');
-    if (textAreas.length >= 2) {
-      textAreas[0].value = leftOutput;
-      textAreas[1].value = rightOutput;
-      textAreas[0].dispatchEvent(new Event('input'));
-      textAreas[1].dispatchEvent(new Event('input'));
+    const prompt = targetElement?.querySelector<HTMLTextAreaElement>('.ai12prompt1 .prompt');
+    if (prompt) {
+      prompt.value = output;
+      prompt.dispatchEvent(new Event('input'));
     }
   }
 
@@ -165,7 +163,7 @@ textAreas[0].dispatchEvent(new Event('input'));
     };
     appWindow.fillSide = fillSide;
     appWindow.fillBoth = fillBoth;
-    appWindow.copyPreviousAiSideOutput = copyPreviousAiSideOutputM
+    appWindow.copyPreviousAiSideOutput = copyPreviousAiSideOutput;
     appWindow.fill1 = fill1;
     appWindow.fill2 = fill2;
     appWindow.fillMono = fillMono;
