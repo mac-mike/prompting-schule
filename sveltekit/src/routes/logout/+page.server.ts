@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { resolve } from '$app/paths';
+import { getCookiePath, withBase } from '$lib/server/subfolder';
 import { env } from '$env/dynamic/private';
 
 export const load: PageServerLoad = async ({ cookies, url }) => {
@@ -9,12 +9,9 @@ export const load: PageServerLoad = async ({ cookies, url }) => {
   const token = cookies.get('jwt');
 
 
-  const SUBFOLDER = env.SUBFOLDER ?? "";
-  const path = "/" + SUBFOLDER;
-
-  // Cookie löschen
+  // Cookie löschen – gleicher Path wie beim Setzen (pw.ts)
   cookies.set('jwt', '', {
-    path: path,
+    path: getCookiePath(),
     httpOnly: true,
     secure: true,
     sameSite: 'strict',
@@ -22,7 +19,7 @@ export const load: PageServerLoad = async ({ cookies, url }) => {
   });
 
   if (env.KEYCLOAK_CLIENT_SECRET) {
-    throw redirect(302, resolve('/login-sso/logout/'));
+    throw redirect(302, withBase('/login-sso/logout/'));
   }
   
   

@@ -255,7 +255,7 @@
 
   async function createMemorySummary(previousSummary: string, message: string, assistantResponse: string): Promise<string | null> {
     try {
-      const response = await fetch('/api/aiAnswer', {
+      const response = await fetch(resolve('/api/aiAnswer'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

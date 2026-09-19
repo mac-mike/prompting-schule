@@ -9,7 +9,7 @@ import { createJWT } from './jwt';
 import { json } from '@sveltejs/kit';
 import { newUserUUID } from '$lib/server/dbUtils.js';
 
-import { resolve } from '$app/paths';
+import { getCookiePath, withBase } from '$lib/server/subfolder';
 
 
 export async function hashPassword(password: string) {
@@ -175,10 +175,8 @@ export function createJWTResponse(user: { id: string; email: string; isAdmin: nu
     isAdmin: user.isAdmin
   });
 
-  const SUBFOLDER = env.SUBFOLDER ?? "";
-  const path = "/" + SUBFOLDER;
+  const path = getCookiePath();
 
-  // 'Set-Cookie': `jwt=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=604800`,
   return new Response(JSON.stringify({ success: true }), {
     status: 200,
     headers: {
@@ -196,12 +194,9 @@ export function createJWTResponseSSO(user: { id: string; email: string; isAdmin:
     isAdmin: user.isAdmin
   });
 
-  const SUBFOLDER = env.SUBFOLDER ?? "";
+  const path = getCookiePath();
+  const pathProfil = withBase('/profil');
 
-  const path = "/" + SUBFOLDER;
-  const pathProfil = resolve('/profil');
-
-  // 'Set-Cookie': `jwt=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=604800`,
   return new Response(null, {
     status: 302,
     headers: {
