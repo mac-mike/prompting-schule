@@ -11,6 +11,7 @@ import {
   readString,
   reorderSwap,
   requireEditor,
+  SLUG_PATTERN,
   writeEditorAuditLog
 } from '$lib/server/editor';
 
@@ -143,11 +144,22 @@ export const actions: Actions = {
 
       const lessonName = readString(formData, 'lessonName');
       const lessonEmoji = readString(formData, 'lessonEmoji');
+      const URL = readString(formData, 'URL');
       const starsNeeded = readInt(formData, 'starsNeeded');
 
       if (!lessonName) throw error(400, 'Der Lektionsname darf nicht leer sein.');
+      if (!SLUG_PATTERN.test(URL)) {
+        throw error(400, 'Die URL darf nur Kleinbuchstaben, Ziffern und Bindestriche enthalten.');
+      }
       if (!Number.isInteger(starsNeeded) || starsNeeded < 0) {
         throw error(400, 'Die benötigten Sterne müssen 0 oder größer sein.');
+      }
+
+      if (URL !== lesson.URL) {
+        const existing = await prisma.lesson.findUnique({ where: { URL } });
+        if (existing) {
+          throw error(400, `Die Lektions-URL "${URL}" ist bereits vergeben (Lektions-URLs sind instanzweit eindeutig).`);
+        }
       }
 
       await prisma.lesson.update({
@@ -155,6 +167,7 @@ export const actions: Actions = {
         data: {
           lessonName,
           lessonEmoji: lessonEmoji || null,
+          URL,
           starsNeeded
         }
       });
@@ -163,7 +176,12 @@ export const actions: Actions = {
         actorUserId: actor.id,
         action: EDITOR_AUDIT_ACTIONS.LESSON_UPDATED,
         outcome: 'SUCCESS',
-        metadata: { entityType: 'lesson', lessonId: lesson.id, lessonUrl: lesson.URL }
+        metadata: {
+          entityType: 'lesson',
+          lessonId: lesson.id,
+          lessonUrl: URL,
+          ...(URL !== lesson.URL ? { previousLessonUrl: lesson.URL } : {})
+        }
       });
 
       return { success: true, action: 'updateLesson', message: 'Die Lektion wurde gespeichert.' };
