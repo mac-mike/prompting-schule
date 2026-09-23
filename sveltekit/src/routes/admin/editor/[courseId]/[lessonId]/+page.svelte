@@ -77,6 +77,17 @@
         <input type="text" name="lessonName" value={data.lesson.lessonName} required maxlength="200" />
       </label>
       <label>
+        URL (Slug)
+        <input
+          type="text"
+          name="URL"
+          value={data.lesson.URL}
+          required
+          maxlength="100"
+          pattern="[a-z0-9\-]+"
+        />
+      </label>
+      <label>
         Emoji
         <input type="text" name="lessonEmoji" value={data.lesson.lessonEmoji ?? ''} maxlength="20" />
       </label>
@@ -88,6 +99,9 @@
         <button type="submit">Lektion speichern</button>
       </div>
     </form>
+    <p class="hint">
+      Hinweis: Nach dem Ändern der URL funktionieren alte Links auf diese Lektion nicht mehr.
+    </p>
   </section>
 
   <section class="panel">
