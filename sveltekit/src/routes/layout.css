@@ -544,11 +544,11 @@ section {
 }
 
 .element {
-  margin-bottom: 120px;
+  margin-bottom: 40px;
 }
 
 .element.negativeMarginTop {
-  margin-top: -120px;
+  margin-top: -40px;
 }
 
 mark {
